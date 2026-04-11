@@ -1,5 +1,7 @@
 # E-Commerce Application
 
 #### This application is made to explore different Dotnet architecture
-#### Clean Architecture / Domain Driven Design / Repository Pattern 
+1. Clean Architecture 
+2. Domain Driven Design
+3. Repository Pattern 
 
