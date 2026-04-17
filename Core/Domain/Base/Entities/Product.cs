@@ -8,10 +8,8 @@ public class Product
     public string? Slug { get; private set; }
     public string? ShortDescription { get; private set; }
     public string? LongDescription { get; private set; }
-    public decimal BasePrice { get; private set; }
-    public string? StockKeepingUnit { get; private set; }
-    public decimal DiscountedPrice { get; private set; }
-    public int StockQuantity { get; private set; }
+    public string? BrandId { get; set; }
+    public bool? IsActive { get; set; }
     public DateTimeOffset CreatedAt { get; private set; }
     #endregion
 
