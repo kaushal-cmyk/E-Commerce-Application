@@ -6,9 +6,9 @@ public class Brand : FullAuditedAggregateRoot<Guid>
 {
     #region Fields and Properties 
 
-    public string? Name { get; set; }
-    public bool? IsActive { get; set; }
-    public string? LogoUrl { get; set; }
+    public string? Name { get; private set; }
+    public bool? IsActive { get; private set; }
+    public string? LogoUrl { get;private set; }
 
     #endregion
 

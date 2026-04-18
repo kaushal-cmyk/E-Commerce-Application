@@ -7,11 +7,11 @@ public class Review : AuditedAggregateRoot<Guid>
 {
     #region Fields and Properties
 
-    public int? Rating { get; set; }
-    public string? Comment { get; set; }
-    public bool? IsApproved { get; set; }
-    public Guid? UserId { get; set; }
-    public Guid ProductId { get; set; }
+    public int? Rating { get; private set; }
+    public string? Comment { get; private set; }
+    public bool? IsApproved { get; private set; }
+    public Guid? UserId { get; private set; }
+    public Guid ProductId { get; private set; }
     
     #endregion
 

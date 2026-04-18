@@ -6,10 +6,10 @@ public class Order : FullAuditedAggregateRoot<Guid>
 {
     #region Fields and Properties
 
-    public string? OrderStatus { get; set; }
-    public string? PaymentStatus { get; set; }
-    public decimal? TotalAmount { get; set; }
-    public Guid? UserId { get; set; }
+    public string? OrderStatus { get; private set; }
+    public string? PaymentStatus { get; private set; }
+    public decimal? TotalAmount { get;private set; }
+    public Guid? UserId { get;private set; }
     
     #endregion
 

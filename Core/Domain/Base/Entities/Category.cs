@@ -6,10 +6,10 @@ public class Category : FullAuditedAggregateRoot<Guid>
 {
     #region Fields and Properties
     
-    public string? Name { get; set; }
-    public string? Slug { get; set; }
-    public Guid? ParentCategoryId { get; set; }
-    public bool? IsActive { get; set; }
+    public string? Name { get; private set; }
+    public string? Slug { get; private set; }
+    public Guid? ParentCategoryId { get; private set; }
+    public bool? IsActive { get; private set; }
     
     #endregion
 
