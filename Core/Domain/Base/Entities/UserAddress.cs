@@ -1,12 +1,12 @@
 using System.Reflection.Metadata.Ecma335;
+using REPL.Base.Core.Domain.Primitives.Models;
 
 namespace E_commerce.Core.Domain.Entities;
 
-public class UserAddress
+public class UserAddress : Entity<Guid>
 {
     #region Fields and Properties
 
-    public Guid? Id { get; set; }
     public string? UserId { get; set; }
     public string? FullName { get; set; }
     public string? PhoneNumber { get; set; }
@@ -16,7 +16,6 @@ public class UserAddress
     public string? Country { get; set; }
     public string? PostalCode { get; set; }
     public bool IsDefault { get; set; }
-    public DateTime CreatedAt { get; set; }
     
     #endregion
 }

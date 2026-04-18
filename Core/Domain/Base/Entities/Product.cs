@@ -1,6 +1,8 @@
+using REPL.Base.Core.Domain.Primitives.Models;
+
 namespace E_commerce.Core.Domain.Entities;
 
-public class Product
+public class Product : FullAuditedAggregateRoot<Guid>
 {
     #region Fields and Properties 
     
@@ -8,9 +10,9 @@ public class Product
     public string? Slug { get; private set; }
     public string? ShortDescription { get; private set; }
     public string? LongDescription { get; private set; }
-    public string? BrandId { get; set; }
     public bool? IsActive { get; set; }
-    public DateTimeOffset CreatedAt { get; private set; }
+    public Guid BrandId { get; set; }
+    
     #endregion
 
     #region Constructors

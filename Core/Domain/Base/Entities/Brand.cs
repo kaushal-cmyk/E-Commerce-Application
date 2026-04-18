@@ -1,8 +1,10 @@
+using REPL.Base.Core.Domain.Primitives.Models;
+
 namespace E_commerce.Core.Domain.Entities;
 
-public class Brand
+public class Brand : FullAuditedAggregateRoot<Guid>
 {
-    #region Fields and Properties
+    #region Fields and Properties 
 
     public string? Name { get; set; }
     public bool? IsActive { get; set; }

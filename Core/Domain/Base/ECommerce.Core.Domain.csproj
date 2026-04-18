@@ -10,5 +10,10 @@
   <ItemGroup>
     <Folder Include="ValueObjects\" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include = "Base.Core.Domain.Primitives.dll">
+      <HintPath>../../../References/Base.Core.Domain.Primitives.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
