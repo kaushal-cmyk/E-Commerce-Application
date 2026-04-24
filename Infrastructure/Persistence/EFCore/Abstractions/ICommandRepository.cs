@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+#nullable enable
 namespace ECommerce.Infrastructure.Persistance.EFCore.Abstractions;
 
 public interface ICommandRepository<TEntity> where TEntity : class

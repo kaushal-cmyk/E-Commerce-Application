@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 
+#nullable enable
 namespace ECommerce.Infrastructure.Persistance.EFCore.Abstractions;
 
 #nullable enable

@@ -1,3 +1,4 @@
+#nullable enable
 namespace DefaultNamespace.Abstractions;
 
 public interface IUnitOfWork : IDisposable
