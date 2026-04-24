@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 namespace ECommerce.Infrastructure.Persistance.EFCore.Abstractions;
 
 #nullable enable
-public interface IQueryRepository<TEntity> : IRepository<TEntity> where TEntity : class
+public interface IQueryRepository<TEntity> where TEntity : class
 {
     int Count(Expression<Func<TEntity, bool>> predicate);
     
