@@ -22,10 +22,11 @@ public interface ICommandRepository<TEntity> where TEntity : class
 
     Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
 
-    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default (CancellationToken));
+    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
     
     Task RemoveAsync(object id, CancellationToken cancellationToken = default(CancellationToken));
+    
     Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default(CancellationToken));
+    
     Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
-
 }
