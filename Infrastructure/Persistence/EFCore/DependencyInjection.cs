@@ -1,6 +1,5 @@
-using DefaultNamespace;
+using System.Reflection;
 using DefaultNamespace.Abstractions;
-using ECommerce.Infrastructure.Persistance.EFCore.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,38 +7,16 @@ namespace ECommerce.Infrastructure.Persistance.EFCore;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructurePersistenceDependencies(
-        this IServiceCollection services, string? connectionString)
-    {
-        services.AddBaseInfrastructurePersistenceDependencies();
+    public static readonly Assembly EFCoreAssemblyReference = typeof(DependencyInjection).Assembly;
 
-        if (!string.IsNullOrWhiteSpace(connectionString))
-            services.AddEcomDbContext(connectionString);
-
-        services.AddRepositories();
-        return services;
-    }
-
-    private static IServiceCollection AddEcomDbContext(
+    public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, string connectionString)
     {
-        services.AddScoped<DbContext, EcomDBContext>()
-            .AddScoped(sp => sp.GetRequiredService<IDbContextFactory<EcomDBContext>>().CreateDbContext())
-            .AddScoped<IDbContextFactory<DbContext>, ApplicationDbContextFactory<DbContext, EcomDBContext>>()
-            .AddDbContextFactory<EcomDBContext>((sp, options) =>
-            {
-                options.UseLazyLoadingProxies()
-                    .UseSqlServer(connectionString)
-                    .AddInterceptors(sp.GetRequiredService<AuditInterceptor>());
-            }, lifetime: ServiceLifetime.Scoped);
+        services.AddDbContext<EcomDBContext>(options =>
+            options.UseSqlServer(connectionString));
 
-        return services;
-    }
+        // services.AddScoped<IProductRepository, ProductRepository>();
 
-    private static IServiceCollection AddRepositories(
-        this IServiceCollection services)
-    {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }
