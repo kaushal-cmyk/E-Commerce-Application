@@ -1,7 +1,7 @@
 using System.Reflection.Metadata.Ecma335;
 using REPL.Base.Core.Domain.Primitives.Models;
 
-namespace E_commerce.Core.Domain.Entities;
+namespace ECommerce.Core.Domain.Entities;
 
 public class UserAddress : Entity<Guid>
 {

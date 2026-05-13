@@ -1,6 +1,6 @@
-using E_commerce.Core.Domain.Entities;
+using ECommerce.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-
+    
 namespace ECommerce.Infrastructure.Persistance.EFCore;
 
 public class EcomDBContext(DbContextOptions<EcomDBContext> options) : DbContext(options)
