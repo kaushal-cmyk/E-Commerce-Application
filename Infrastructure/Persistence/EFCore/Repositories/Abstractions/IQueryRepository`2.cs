@@ -1,8 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using ECommerce.Infrastructure.Persistance.EFCore.Abstractions;
 
 #nullable enable
-namespace E_commerce.Infrastructure.Persistance.EFCore.Abstractions;
+namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
 
 public interface IQueryRepository<TEntity, TKey> : IQueryRepository<TEntity> 
     where TEntity : class

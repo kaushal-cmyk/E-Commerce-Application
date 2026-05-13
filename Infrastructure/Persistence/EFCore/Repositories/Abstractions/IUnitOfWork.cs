@@ -1,5 +1,7 @@
 #nullable enable
-namespace DefaultNamespace.Abstractions;
+using DefaultNamespace;
+
+namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
 
 public interface IUnitOfWork : IDisposable
 {
