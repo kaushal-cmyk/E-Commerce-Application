@@ -17,10 +17,23 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             _dbSet = context.Set<TEntity>();
         }
 
+        public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
+        {
+            _dbSet.AddRange();
+            return entities;
+        }
 
+        public TEntity Add(TEntity entity)
+        {
+            _dbSet.Add(entity);
+            return entity;
+        }
 
-
-
+        public TEntity Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            return entity;
+        }
 
 
     }

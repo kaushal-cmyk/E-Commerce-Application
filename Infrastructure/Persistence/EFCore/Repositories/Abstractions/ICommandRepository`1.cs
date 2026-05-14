@@ -11,7 +11,7 @@ public interface ICommandRepository<TEntity> where TEntity : class
 
     TEntity Update(TEntity entity);
 
-    void Remove(object id);
+    //void Remove(object id);
 
     void Remove(object?[]? id);
 
@@ -25,7 +25,7 @@ public interface ICommandRepository<TEntity> where TEntity : class
 
     Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
     
-    Task RemoveAsync(object id, CancellationToken cancellationToken = default(CancellationToken));
+    //Task RemoveAsync(object id, CancellationToken cancellationToken = default(CancellationToken));
     
     Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default(CancellationToken));
     
