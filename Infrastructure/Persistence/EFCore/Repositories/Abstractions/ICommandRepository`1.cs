@@ -1,33 +1,29 @@
-using System.Collections.Generic;
 
 #nullable enable
 namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
 
 public interface ICommandRepository<TEntity> where TEntity : class
 {
-    IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
+    void AddRange(IEnumerable<TEntity> entities);
 
-    TEntity Add(TEntity entity);
+    void Add(TEntity entity);
 
-    TEntity Update(TEntity entity);
-
-    //void Remove(object id);
+    void Update(TEntity entity);
 
     void Remove(object?[]? id);
 
     void Remove(TEntity entity);
 
-    Task<IEnumerable<TEntity>> AddRangeAsync(
+    Task AddRangeAsync(
         IEnumerable<TEntity> entities,
         CancellationToken cancellationToken = default(CancellationToken));
 
-    Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
+    Task AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
 
-    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
-    
-    //Task RemoveAsync(object id, CancellationToken cancellationToken = default(CancellationToken));
-    
+    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
+
+
     Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default(CancellationToken));
-    
+
     Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
 }
