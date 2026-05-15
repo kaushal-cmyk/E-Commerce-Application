@@ -16,22 +16,34 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             _dbSet = context.Set<TEntity>();
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public virtual IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
         {
             _dbSet.AddRange(entities);
+            return entities;
         }
 
-        public void Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             _dbSet.Add(entity);
+            return entity;
         }
 
-        public void Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
             _dbSet.Update(entity);
+            return entity;
         }
 
-        public void Remove(object?[]? ids)
+        public virtual void Remove(object id)
+        {
+            var val = _dbSet.Find(id);
+            if (val != null)
+            {
+                _dbSet.Remove(val);
+            }
+        }
+
+        public virtual void Remove(object?[]? ids)
         {
             var entity = _dbSet.Find(ids);
             if (entity is null)
@@ -41,30 +53,30 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             _dbSet.Remove(entity);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
         }
 
-        public async Task AddRangeAsync(
+        public virtual async Task AddRangeAsync(
             IEnumerable<TEntity> entities,
             CancellationToken cancellationToken = default)
         {
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             await _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Update(entity);
             return Task.CompletedTask;
         }
 
-        public async Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default)
         {
             var entity = await _dbSet.FindAsync(id, cancellationToken);
             if (entity is null)
@@ -74,13 +86,13 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             _dbSet.Remove(entity);
         }
 
-        public Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
 
-        public void Remove(TKey id)
+        public virtual void Remove(TKey id)
         {
             var entity = _dbSet.Find(id);
             if (entity is null)
@@ -89,7 +101,7 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             }
             _dbSet.Remove(entity);
         }
-        public async Task RemoveAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveAsync(TKey id, CancellationToken cancellationToken = default)
         {
             var entity = await _dbSet.FindAsync(id, cancellationToken);
             if (entity is null)

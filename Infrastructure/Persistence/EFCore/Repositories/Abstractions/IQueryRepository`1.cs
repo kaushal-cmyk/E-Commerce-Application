@@ -15,6 +15,7 @@ public interface IQueryRepository<TEntity> where TEntity : class
 
     TEntity? Find(Expression<Func<TEntity, bool>> predicate);
 
+    TEntity? GetById(object id);
     TEntity? GetByIds(object?[]? ids);
 
     Task<bool> AnyAsync(
@@ -35,5 +36,6 @@ public interface IQueryRepository<TEntity> where TEntity : class
         Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default(CancellationToken));
 
+    Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default(CancellationToken));
     Task<TEntity?> GetByIdsAsync(object?[]? ids, CancellationToken cancellationToken = default(CancellationToken));
 }

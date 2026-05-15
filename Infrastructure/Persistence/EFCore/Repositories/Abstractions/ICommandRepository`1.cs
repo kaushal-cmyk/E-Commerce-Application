@@ -4,12 +4,13 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
 
 public interface ICommandRepository<TEntity> where TEntity : class
 {
-    void AddRange(IEnumerable<TEntity> entities);
+    IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
 
-    void Add(TEntity entity);
+    TEntity Add(TEntity entity);
 
-    void Update(TEntity entity);
+    TEntity Update(TEntity entity);
 
+    void Remove(object id);
     void Remove(object?[]? id);
 
     void Remove(TEntity entity);
@@ -21,7 +22,6 @@ public interface ICommandRepository<TEntity> where TEntity : class
     Task AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
 
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken));
-
 
     Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default(CancellationToken));
 

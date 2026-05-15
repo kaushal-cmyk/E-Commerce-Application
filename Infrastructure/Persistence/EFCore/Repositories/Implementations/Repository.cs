@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations
 {
-    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
+    public class Repository<TEntity, TKey> : QueryRepository<TEntity, TKey>, IRepository<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
