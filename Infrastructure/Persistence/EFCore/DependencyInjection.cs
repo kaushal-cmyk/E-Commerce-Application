@@ -11,14 +11,19 @@ public static class DependencyInjection
     public static readonly Assembly EFCoreAssemblyReference = typeof(DependencyInjection).Assembly;
 
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services, string connectionString)
+        this IServiceCollection services, string? connectionString)
     {
+        services.AddScoped<AuditInterceptor>();
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            services.AddDbContext<EcomDBContext>((sp, options) => options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString)
+                .AddInterceptors(sp.GetRequiredService<AuditInterceptor>()));
 
-        services.AddDbContext<EcomDBContext>(options =>
-    options.UseSqlServer(connectionString));
-
-        services.AddScoped<DbContext>(sp =>
-            sp.GetRequiredService<EcomDBContext>());
+            services.AddScoped<DbContext>(sp =>
+                sp.GetRequiredService<EcomDBContext>());
+        }
 
 
         // services.AddScoped<IProductRepository, ProductRepository>();
@@ -28,9 +33,10 @@ public static class DependencyInjection
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped(typeof(IQueryRepository<,>), typeof(QueryRepository<,>));
+        services.AddScoped(typeof(ICommandRepository<,>), typeof(CommandRepository<,>));
+        services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
-
-
 }
