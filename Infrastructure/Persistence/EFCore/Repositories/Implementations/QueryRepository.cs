@@ -69,12 +69,12 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             return await _dbSet.CountAsync(predicate, cancellationToken);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _dbSet.ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
         }
@@ -85,13 +85,18 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return await _dbSet.FindAsync(id, cancellationToken);
+        }
+
+        public virtual async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public virtual async Task<TEntity?> GetByIdsAsync(object?[]? ids,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _dbSet.FindAsync(ids, cancellationToken);
         }

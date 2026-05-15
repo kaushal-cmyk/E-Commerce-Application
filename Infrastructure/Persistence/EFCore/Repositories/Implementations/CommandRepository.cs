@@ -65,18 +65,18 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             await _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             _dbSet.Update(entity);
             return Task.CompletedTask;
         }
 
-        public virtual async Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveAsync(object?[]? id, CancellationToken cancellationToken = default(CancellationToken))
         {
             var entity = await _dbSet.FindAsync(id, cancellationToken);
             if (entity is null)
@@ -86,7 +86,7 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             _dbSet.Remove(entity);
         }
 
-        public virtual Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             _dbSet.Remove(entity);
             return Task.CompletedTask;
@@ -101,7 +101,7 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
             }
             _dbSet.Remove(entity);
         }
-        public virtual async Task RemoveAsync(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveAsync(TKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
             var entity = await _dbSet.FindAsync(id, cancellationToken);
             if (entity is null)
