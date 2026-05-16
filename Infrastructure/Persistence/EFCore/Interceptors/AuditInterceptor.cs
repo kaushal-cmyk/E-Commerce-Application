@@ -3,6 +3,7 @@ using ECommerce.Core.Application.Services.Abstractions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Core.Domain.ValueObjects;
 
 namespace ECommerce.Infrastructure.Persistance.EFCore.Interceptors
 {
@@ -42,27 +43,25 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Interceptors
         {
             var now = DateTimeOffset.UtcNow;
             var user = _loggedInUserService.GetCurrentUserIdentity() ?? "System";
+            var actionInfo = new ActionInfo(user, now);
 
             foreach (var entry in context.ChangeTracker.Entries())
             {
                 if (entry.State == EntityState.Added)
                 {
-                    TrySetProperty(entry, "Created", now);
-                    TrySetProperty(entry, "CreatedBy", user);
+                    TrySetProperty(entry, "Created", actionInfo);
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
-                    TrySetProperty(entry, "Updated", now);
-                    TrySetProperty(entry, "UpdatedBy", user);
+                    TrySetProperty(entry, "Updated", actionInfo);
                 }
 
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
                     TrySetProperty(entry, "IsDeleted", true);
-                    TrySetProperty(entry, "Updated", now);
-                    TrySetProperty(entry, "UpdatedBy", user);
+                    TrySetProperty(entry, "Updated", actionInfo);
                 }
             }
         }
