@@ -30,6 +30,7 @@
                             
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\Application\ECommerce.Core.Application.csproj" />
       <ProjectReference Include="..\..\..\Core\Domain\Base\ECommerce.Core.Domain.csproj" />
     </ItemGroup>
 
