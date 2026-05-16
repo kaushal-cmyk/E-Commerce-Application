@@ -1,8 +1,8 @@
-using REPL.Base.Core.Domain.Primitives.Models;
+using ECommerce.Core.Domain.Common;
 
 namespace ECommerce.Core.Domain.Entities;
 
-public class ProductVarient : Entity<Guid>
+public class ProductVarient : BaseEntity<Guid>
 {
     #region Fields and Properties
 
@@ -11,7 +11,7 @@ public class ProductVarient : Entity<Guid>
     public decimal DiscountedPrice { get; private set; }
     public int StockQuantity { get; private set; }
     public bool? IsActive { get; private set; }
-    
+
     public Guid ProductId { get; private set; }
     #endregion
 

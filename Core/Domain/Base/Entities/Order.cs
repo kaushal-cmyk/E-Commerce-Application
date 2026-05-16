@@ -1,4 +1,4 @@
-using REPL.Base.Core.Domain.Primitives.Models;
+using ECommerce.Core.Domain.Common;
 
 namespace ECommerce.Core.Domain.Entities;
 

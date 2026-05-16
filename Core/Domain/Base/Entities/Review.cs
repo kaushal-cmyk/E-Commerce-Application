@@ -1,9 +1,8 @@
-using System.Reflection.Metadata.Ecma335;
-using REPL.Base.Core.Domain.Primitives.Models;
+using ECommerce.Core.Domain.Common;
 
 namespace ECommerce.Core.Domain.Entities;
 
-public class Review : AuditedAggregateRoot<Guid>
+public class Review : AuditedEntity<Guid>
 {
     #region Fields and Properties
 
@@ -12,18 +11,18 @@ public class Review : AuditedAggregateRoot<Guid>
     public bool? IsApproved { get; private set; }
     public Guid? UserId { get; private set; }
     public Guid ProductId { get; private set; }
-    
+
     #endregion
 
     #region Constructors
 
-    
+
 
     #endregion
 
     #region Actions and Behaviorss
 
-    
+
 
     #endregion
 }

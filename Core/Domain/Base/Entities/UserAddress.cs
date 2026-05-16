@@ -1,9 +1,8 @@
-using System.Reflection.Metadata.Ecma335;
-using REPL.Base.Core.Domain.Primitives.Models;
+using ECommerce.Core.Domain.Common;
 
 namespace ECommerce.Core.Domain.Entities;
 
-public class UserAddress : Entity<Guid>
+public class UserAddress : BaseEntity<Guid>
 {
     #region Fields and Properties
 
@@ -16,6 +15,6 @@ public class UserAddress : Entity<Guid>
     public string? Country { get; private set; }
     public string? PostalCode { get; private set; }
     public bool IsDefault { get; private set; }
-    
+
     #endregion
 }
