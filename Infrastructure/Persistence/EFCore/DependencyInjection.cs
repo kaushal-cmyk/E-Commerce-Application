@@ -1,4 +1,5 @@
 using System.Reflection;
+using ECommerce.Infrastructure.Persistance.EFCore.Interceptors;
 using ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
 using ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
