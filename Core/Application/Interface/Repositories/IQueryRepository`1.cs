@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 
 #nullable enable
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+namespace ECommerce.Core.Application.Interface.Repositories;
 
 public interface IQueryRepository<TEntity> where TEntity : class
 {

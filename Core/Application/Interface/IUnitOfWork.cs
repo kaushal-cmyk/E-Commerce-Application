@@ -1,6 +1,6 @@
 #nullable enable
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+namespace ECommerce.Core.Application.Interface;
 
 public interface IUnitOfWork : IDisposable
 {

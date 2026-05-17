@@ -1,5 +1,4 @@
-﻿
-using ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+﻿using ECommerce.Core.Application.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

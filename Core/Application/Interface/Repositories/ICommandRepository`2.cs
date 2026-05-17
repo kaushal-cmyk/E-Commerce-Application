@@ -1,5 +1,7 @@
 #nullable enable
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+using ECommerce;
+
+namespace ECommerce.Core.Application.Interface.Repositories;
 
 public interface ICommandRepository<TEntity, TKey> : ICommandRepository<TEntity>
     where TEntity : class

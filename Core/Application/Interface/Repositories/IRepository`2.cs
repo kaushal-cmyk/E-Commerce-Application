@@ -1,4 +1,4 @@
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+namespace ECommerce.Core.Application.Interface.Repositories;
 
 public interface IRepository<TEntity, TKey> : 
     IRepository<TEntity>,

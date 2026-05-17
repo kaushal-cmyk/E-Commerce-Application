@@ -1,4 +1,4 @@
-﻿using ECommerce.Infrastructure.Persistance.EFCore.Repositories.Abstractions;
+﻿using ECommerce.Core.Application.Interface.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
