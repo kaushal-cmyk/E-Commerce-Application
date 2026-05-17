@@ -8,6 +8,5 @@ namespace ECommerce.Core.Application.Dtos
         public string? LongDescription { get; init; }
         public decimal Price { get; init; }
         public Guid BrandId { get; init; }
-
     }
 }
