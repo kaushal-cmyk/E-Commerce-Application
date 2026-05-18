@@ -43,5 +43,53 @@ namespace ECommerce.Core.Application.Services.Implementations
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
+        public async Task<ProductDto> CreateProduct(CreateProductDto productDto)
+        {
+            var product = Product.Create(
+                title: productDto.Title,
+                shortDescription: productDto.ShortDescription,
+                longDescription: productDto.LongDescription,
+                price: productDto.Price,
+                brandId: productDto.BrandId);
+
+            await _productRespository.AddAsync(product);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<ProductDto>(product);
+        }
+
+        public async Task<ProductDto?> UpdateProduct(
+            UpdateProductDto updateProductDto)
+        {
+            var product =
+                await _productRespository
+                    .GetByIdAsync(updateProductDto.Id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            product.UpdateDetails(
+                updateProductDto.Title,
+                updateProductDto.ShortDescription,
+                updateProductDto.LongDescription
+            );
+
+            product.ChangePrice(updateProductDto.Price);
+
+            _productRespository.Update(product);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<ProductDto>(product);
+        }
+
+
+        public async Task DeleteProduct(Guid id)
+        {
+            await _productRespository.RemoveAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }

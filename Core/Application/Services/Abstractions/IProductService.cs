@@ -7,9 +7,9 @@ namespace ECommerce.Core.Application.Services.Abstractions
     {
         Task<ProductDto?> GetProduct(Guid id);
         Task<IEnumerable<ProductDto>> GetAllProducts();
-        Task<ProductDto> CreateAsync(CreateProductDto request);
-        Task<ProductDto> UpdateAsync(UpdateProductDto request);
-        Task DeleteAsync(Guid id);
+        Task<ProductDto> CreateProduct(CreateProductDto request);
+        Task<ProductDto> UpdateProduct(UpdateProductDto request);
+        Task DeleteProduct(Guid id);
 
     }
 }
