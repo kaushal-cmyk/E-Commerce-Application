@@ -10,6 +10,5 @@ namespace ECommerce.Core.Application.Services.Abstractions
         Task<ProductDto> CreateProduct(CreateProductDto request);
         Task<ProductDto> UpdateProduct(UpdateProductDto request);
         Task DeleteProduct(Guid id);
-
     }
 }
