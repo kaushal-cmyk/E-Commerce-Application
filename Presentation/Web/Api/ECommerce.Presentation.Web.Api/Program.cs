@@ -13,13 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddHttpContextAccessor();
+//builder.Services.
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingConfig>());
 builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 
-builder.Services.AddInfrastructure(configuration.GetConnectionString("DefaultConnection"));
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddInfrastructure(connectionString);
 
 var app = builder.Build();
 

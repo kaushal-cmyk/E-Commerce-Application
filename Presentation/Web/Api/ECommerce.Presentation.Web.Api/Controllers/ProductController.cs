@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Presentation.Web.Api.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -32,8 +34,7 @@ namespace ECommerce.Presentation.Web.Api.Controllers
             return Ok(product);
         }
 
-
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProductDto request)
         {
             var product = await _productService.CreateProduct(request);
@@ -43,11 +44,12 @@ namespace ECommerce.Presentation.Web.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductDto request)
         {
+            //var dto = request with { Id = id };
             await _productService.UpdateProduct(request);
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _productService.DeleteProduct(id);
