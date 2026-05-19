@@ -103,7 +103,7 @@ namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementatio
         }
         public virtual async Task RemoveAsync(TKey id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var entity = await _dbSet.FindAsync(id, cancellationToken);
+            var entity = await _dbSet.FindAsync(new object[] { id }, cancellationToken);
             if (entity is null)
             {
                 throw new ArgumentNullException(nameof(id), "Entity not found.");

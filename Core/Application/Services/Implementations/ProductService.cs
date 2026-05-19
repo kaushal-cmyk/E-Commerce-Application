@@ -12,7 +12,7 @@ namespace ECommerce.Core.Application.Services.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Product, Guid> _productRespository;
+        private readonly IRepository<Product, Guid> _productRepository;
 
         public ProductService(
             IMapper mapper,
@@ -21,16 +21,16 @@ namespace ECommerce.Core.Application.Services.Implementations
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _productRespository = productRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<ProductDto?> GetProduct(Guid id)
         {
-            var product = await _productRespository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id);
 
             if (product == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(product), "Entity not Found.");
             }
 
             return _mapper.Map<ProductDto>(product);
@@ -38,7 +38,7 @@ namespace ECommerce.Core.Application.Services.Implementations
 
         public async Task<IEnumerable<ProductDto>> GetAllProducts()
         {
-            var products = await _productRespository.GetAllAsync();
+            var products = await _productRepository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
@@ -52,22 +52,22 @@ namespace ECommerce.Core.Application.Services.Implementations
                 price: productDto.Price,
                 brandId: productDto.BrandId);
 
-            await _productRespository.AddAsync(product);
+            await _productRepository.AddAsync(product);
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<ProductDto>(product);
         }
 
-        public async Task<ProductDto?> UpdateProduct(
+        public async Task<ProductDto> UpdateProduct(
             UpdateProductDto updateProductDto)
         {
             var product =
-                await _productRespository
+                await _productRepository
                     .GetByIdAsync(updateProductDto.Id);
 
             if (product == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(product), "Entity not Found.");
             }
 
             product.UpdateDetails(
@@ -78,7 +78,7 @@ namespace ECommerce.Core.Application.Services.Implementations
 
             product.ChangePrice(updateProductDto.Price);
 
-            _productRespository.Update(product);
+            _productRepository.Update(product);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -88,7 +88,7 @@ namespace ECommerce.Core.Application.Services.Implementations
 
         public async Task DeleteProduct(Guid id)
         {
-            await _productRespository.RemoveAsync(id);
+            await _productRepository.RemoveAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
     }
