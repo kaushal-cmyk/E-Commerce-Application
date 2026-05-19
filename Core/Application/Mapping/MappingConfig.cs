@@ -8,6 +8,7 @@ namespace ECommerce.Core.Application.Mapping
         public MappingConfig()
         {
             CreateMap<Product, ProductDto>();
+            CreateMap<Brand, BrandDto>();
         }
     }
 }
