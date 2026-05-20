@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingConfig>());
 builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddInfrastructure(connectionString);

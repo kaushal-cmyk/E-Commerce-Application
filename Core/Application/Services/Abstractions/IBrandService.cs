@@ -7,7 +7,7 @@ namespace ECommerce.Core.Application.Services.Abstractions
     {
         Task<BrandDto?> GetBrand(Guid id);
         Task<IEnumerable<BrandDto>> GetAllBrand();
-        Task<CreateBrandDto> CreateBrand(CreateBrandDto request);
+        Task<BrandDto> CreateBrand(CreateBrandDto request);
         //Task<UpdateBrandDto> UpdateBrand(UpdateBrandDto request);
         //Task DeleteBrand(Guid id);
     }
