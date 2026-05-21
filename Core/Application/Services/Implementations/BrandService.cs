@@ -14,7 +14,6 @@ namespace ECommerce.Core.Application.Services.Implementations
         private readonly IRepository<Brand, Guid> _brandRepository;
         private readonly IMapper _mapper;
 
-
         public BrandService(
             IUnitOfWork unitOfWork,
             IRepository<Brand, Guid> brandRepository,
