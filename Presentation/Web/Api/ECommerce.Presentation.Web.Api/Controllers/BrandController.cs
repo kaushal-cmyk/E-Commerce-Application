@@ -34,5 +34,12 @@ namespace ECommerce.Presentation.Web.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = brand.Id }, brand);
         }
 
+        [HttpGet("GetBrands")]
+        public async Task<IActionResult> GetAllBrand()
+        {
+            var brands = await _brandService.GetAllBrand();
+            return Ok(brands);
+        }
+
     }
 }
