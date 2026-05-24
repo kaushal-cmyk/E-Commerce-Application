@@ -26,7 +26,6 @@ namespace ECommerce.Presentation.Web.Api.Controllers
             return Ok(brand);
         }
 
-
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] CreateBrandDto request)
         {
@@ -40,6 +39,5 @@ namespace ECommerce.Presentation.Web.Api.Controllers
             var brands = await _brandService.GetAllBrand();
             return Ok(brands);
         }
-
     }
 }
