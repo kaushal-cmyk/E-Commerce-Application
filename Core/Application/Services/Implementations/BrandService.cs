@@ -48,5 +48,33 @@ namespace ECommerce.Core.Application.Services.Implementations
             return _mapper.Map<BrandDto>(brand);
         }
 
+        public async Task<BrandDto> UpdateBrand(UpdateBrandDto brandDto)
+        {
+            var brand = await _brandRepository.GetByIdAsync(brandDto.Id);
+
+            if (brand == null)
+            {
+                throw new ArgumentNullException(nameof(brand), "Brand not found.");
+            }
+
+            brand.UpdateDetails(brandDto.Name, brandDto.LogoUrl);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<BrandDto>(brand);
+        }
+
+        public async Task DeleteBrand(Guid id)
+        {
+            var brand = await _brandRepository.GetByIdAsync(id);
+
+            if (brand == null)
+            {
+                throw new KeyNotFoundException($"Brand with id {id} was not found.");
+            }
+
+            await _brandRepository.RemoveAsync(brand);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
     }
 }
