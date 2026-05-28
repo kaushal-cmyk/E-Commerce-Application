@@ -8,9 +8,9 @@ namespace ECommerce.Core.Domain.Entities.Authentication
 
         #region Field and Properties
 
+        public string UserName { get; private set; }
         public Guid StoreId { get; private set; }
         public string Email { get; private set; }
-
         public string PasswordHash { get; private set; }
         public bool IsVerified { get; private set; }
         public bool IsActive { get; private set; }
@@ -26,8 +26,9 @@ namespace ECommerce.Core.Domain.Entities.Authentication
         protected User() { }
 #nullable enable
 
-        private User(Guid storeId, string email, string passwordHash)
+        private User(string username, Guid storeId, string email, string passwordHash)
         {
+            UserName = username;
             StoreId = storeId;
             Email = email;
             PasswordHash = passwordHash;
@@ -38,11 +39,12 @@ namespace ECommerce.Core.Domain.Entities.Authentication
 
         #region Actions and Behaviours
 
-        public static User Create(Guid storeId, string email, string passwordHash)
+        public static User Create(string username, Guid storeId, string email, string passwordHash)
         {
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(username);
             ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
             ArgumentNullException.ThrowIfNullOrWhiteSpace(passwordHash);
-            return new User(storeId, email, passwordHash);
+            return new User(username, storeId, email, passwordHash);
         }
 
         public void VerifyUser()
