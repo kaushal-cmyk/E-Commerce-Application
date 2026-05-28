@@ -3,7 +3,7 @@ using ECommerce.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Configurations
+namespace ECommerce.Infrastructure.Persistence.EFCore.Configurations
 {
     public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {

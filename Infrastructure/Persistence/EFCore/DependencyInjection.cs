@@ -1,12 +1,12 @@
-using System.Reflection;
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
-using ECommerce.Infrastructure.Persistance.EFCore.Interceptors;
-using ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations;
+using ECommerce.Infrastructure.Persistence.EFCore.Interceptors;
+using ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore;
+namespace ECommerce.Infrastructure.Persistence.EFCore;
 
 public static class DependencyInjection
 {
