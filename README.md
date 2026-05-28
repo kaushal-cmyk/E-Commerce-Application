@@ -25,13 +25,9 @@ This project was created to practice and experiment with:
 The solution follows a layered Clean Architecture structure:
 
 ```text
-Presentation
-    ↓
-Application
-    ↓
-Domain
-    ↓
-Infrastructure
+Presentation  ─────┐
+                   ↓
+Infrastructure ─→ Application ─→ Domain
 ```
 
 ## Project Structure
