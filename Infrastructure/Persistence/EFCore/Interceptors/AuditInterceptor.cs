@@ -1,11 +1,11 @@
 ﻿
 using ECommerce.Core.Application.Services.Abstractions;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
 using ECommerce.Core.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Interceptors
+namespace ECommerce.Infrastructure.Persistence.EFCore.Interceptors
 {
     public sealed class AuditInterceptor : SaveChangesInterceptor
     {

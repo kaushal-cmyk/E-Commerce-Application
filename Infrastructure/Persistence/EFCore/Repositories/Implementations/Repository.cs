@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations
+namespace ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations
 {
     public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IQueryRepository<TEntity, TKey>, ICommandRepository<TEntity, TKey>
         where TEntity : class

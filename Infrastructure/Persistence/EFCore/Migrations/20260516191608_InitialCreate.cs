@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Migrations
+namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

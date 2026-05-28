@@ -1,7 +1,7 @@
 ﻿using ECommerce.Core.Application.Interface.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations
+namespace ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations
 {
     public class CommandRepository<TEntity, TKey> : ICommandRepository<TEntity, TKey>
         where TEntity : class

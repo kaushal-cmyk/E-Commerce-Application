@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ECommerce.Infrastructure.Persistance.EFCore.Repositories.Implementations
+namespace ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations
 {
     public class UnitOfWork : IUnitOfWork
     {
