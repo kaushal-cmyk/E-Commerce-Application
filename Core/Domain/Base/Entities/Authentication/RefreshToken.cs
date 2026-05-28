@@ -12,7 +12,7 @@ namespace ECommerce.Core.Domain.Entities.Authentication
         public DateTimeOffset ExpiresAt { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
 
-        public bool IsExpired => DateTimeOffset.UtcNow >= ExpiresAt;
+        public bool IsExpired => DateTimeOffset.Now >= ExpiresAt;
         public bool IsRevoked => RevokedAt != null;
         public bool IsActive => !IsExpired && !IsRevoked;
 
