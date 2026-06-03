@@ -1,5 +1,5 @@
-﻿using ECommerce.Core.Domain.Entities;
-using ECommerce.Core.Application.Dtos;
+﻿using ECommerce.Core.Application.Dtos;
+using ECommerce.Core.Domain.Entities;
 
 namespace ECommerce.Core.Application.Mapping
 {
