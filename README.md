@@ -206,16 +206,7 @@ dotnet run --project Presentation/Web/Api/ECommerce.Presentation.Web.Api
 
 # Future Improvements (Questionable)
 
-* CQRS with MediatR
-* Redis Caching
-* API Versioning
-* Background Jobs
-* Docker Support
-* Unit Testing
-* Integration Testing
-* Event-Driven Architecture
-* FluentValidation
-* Serilog Logging
+To be determined 
 
 ---
 
