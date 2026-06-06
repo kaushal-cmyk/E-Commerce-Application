@@ -1,6 +1,6 @@
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Application.Services.Implementations;
-using ECommerce.Infrastructure.Persistance.EFCore;
+using ECommerce.Infrastructure.Persistence.EFCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

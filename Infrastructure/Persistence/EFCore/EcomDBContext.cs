@@ -1,4 +1,5 @@
 using ECommerce.Core.Domain.Entities;
+using ECommerce.Core.Domain.Entities.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Persistence.EFCore
@@ -7,6 +8,8 @@ namespace ECommerce.Infrastructure.Persistence.EFCore
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         //protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         //{

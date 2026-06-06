@@ -94,7 +94,7 @@ namespace ECommerce.Core.Application.Services.Implementations
             var principal = _jwtTokenService.GetPrincipalFromExpiredToken(dto.AccessToken);
 
             // 2. Get userId from claims
-            var userIdStr = principal.FindFirst(ClaimTypes.NameIdentifier)
+            var userIdStr = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new SecurityTokenException("Invalid token: missing user ID claim.");
 
             if (!Guid.TryParse(userIdStr, out var userId))
