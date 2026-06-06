@@ -32,7 +32,7 @@ namespace ECommerce.Core.Domain.Entities.Authentication
             StoreId = storeId;
             Email = email;
             PasswordHash = passwordHash;
-            IsVerified = false;
+            IsVerified = true;
         }
         #endregion
 

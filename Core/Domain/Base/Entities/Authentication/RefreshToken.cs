@@ -16,6 +16,8 @@ namespace ECommerce.Core.Domain.Entities.Authentication
         public bool IsRevoked => RevokedAt != null;
         public bool IsActive => !IsExpired && !IsRevoked;
 
+        public virtual User User { get; private set; }
+
         #endregion
 
         #region Constructors
