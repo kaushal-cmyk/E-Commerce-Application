@@ -25,7 +25,6 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 
 builder.Services.AddScoped<IHasher, Hasher>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

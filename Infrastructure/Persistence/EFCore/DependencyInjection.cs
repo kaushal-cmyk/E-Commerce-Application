@@ -1,5 +1,7 @@
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
+using ECommerce.Core.Application.Services.Abstractions;
+using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Interceptors;
 using ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,7 @@ public static class DependencyInjection
 
         // services.AddScoped<IProductRepository, ProductRepository>();
         services.AddRepositories();
+        services.AddAuthServices();
         return services;
     }
 
@@ -39,6 +42,13 @@ public static class DependencyInjection
         services.AddScoped(typeof(ICommandRepository<,>), typeof(CommandRepository<,>));
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        return services;
+    }
+
+    public static IServiceCollection AddAuthServices(this IServiceCollection services)
+    {
+        services.AddScoped<IHasher, Hasher>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
         return services;
     }
 }
