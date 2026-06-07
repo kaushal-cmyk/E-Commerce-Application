@@ -35,10 +35,18 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Configurations
                 .HasDefaultValue(false);
 
             // audit fields — match your existing pattern
-            builder.Property(x => x.Created).HasMaxLength(256);
-            //builder.Property(x => x.CreatedOn);
-            builder.Property(x => x.Updated).HasMaxLength(256);
-            //builder.Property(x => x);
+            builder.OwnsOne(x => x.Created, a =>
+            {
+                a.Property(x => x.By).HasColumnName("CreatedBy").HasMaxLength(256);
+                a.Property(x => x.On).HasColumnName("CreatedOn");
+            });
+
+            builder.OwnsOne(x => x.Updated, a =>
+            {
+                a.Property(x => x.By).HasColumnName("UpdatedBy").HasMaxLength(256);
+                a.Property(x => x.On).HasColumnName("UpdatedOn");
+            });
+
             builder.Property(x => x.IsDeleted).HasDefaultValue(false);
 
             // indexes
