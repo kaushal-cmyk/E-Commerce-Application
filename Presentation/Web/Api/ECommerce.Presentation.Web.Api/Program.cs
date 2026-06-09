@@ -34,11 +34,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
+                Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
             ValidateIssuer = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidIssuer = configuration["JwtSettings:Issuer"],
             ValidateAudience = true,
-            ValidAudience = configuration["Jwt:Audience"],
+            ValidAudience = configuration["JwtSettings:Audience"],
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };

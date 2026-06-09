@@ -45,7 +45,7 @@ namespace ECommerce.Core.Application.Services.Implementations
                 username: dto.UserName,
                 email: dto.Email,
                 passwordHash: hashedPassword,
-                storeId: dto.StoreId);
+                storeId: Guid.Empty);
 
             await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();

@@ -27,7 +27,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
-                    _configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key not set")
+                    _configuration["JwtSettings:Key"] ?? throw new InvalidOperationException("JwtSettings:Key not set")
                     )
                 );
 
@@ -38,8 +38,8 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["JwtSettings:Issuer"],
+                audience: _configuration["JwtSettings:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials
@@ -54,7 +54,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
+                    Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!)
                     ),
                 ValidateIssuer = false,
                 ValidateAudience = false,
