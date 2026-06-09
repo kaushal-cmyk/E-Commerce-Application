@@ -204,9 +204,10 @@ dotnet run --project Presentation/Web/Api/ECommerce.Presentation.Web.Api
 
 ---
 
-# Future Improvements (Questionable)
+# Future Improvements 
 
-To be determined 
+CQRS can be implemented 
+
 
 ---
 
