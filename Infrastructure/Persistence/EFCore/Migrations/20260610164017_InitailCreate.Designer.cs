@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
 {
     [DbContext(typeof(EcomDBContext))]
-    [Migration("20260607173026_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260610164017_InitailCreate")]
+    partial class InitailCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,9 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("StoreId")
                         .HasColumnType("uniqueidentifier");

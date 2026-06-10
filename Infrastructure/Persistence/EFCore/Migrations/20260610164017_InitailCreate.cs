@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitailCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     IsVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     LastLoginAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),

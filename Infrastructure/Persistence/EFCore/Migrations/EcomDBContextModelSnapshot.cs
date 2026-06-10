@@ -91,6 +91,9 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("StoreId")
                         .HasColumnType("uniqueidentifier");
 
