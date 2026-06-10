@@ -22,7 +22,8 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
             var key = new SymmetricSecurityKey(
@@ -41,7 +42,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
                 issuer: _configuration["JwtSettings:Issuer"],
                 audience: _configuration["JwtSettings:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: credentials
                 );
 

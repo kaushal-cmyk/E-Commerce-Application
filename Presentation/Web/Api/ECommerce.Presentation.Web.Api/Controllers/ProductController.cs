@@ -1,11 +1,13 @@
 ﻿using ECommerce.Core.Application.Dtos;
 using ECommerce.Core.Application.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Presentation.Web.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;

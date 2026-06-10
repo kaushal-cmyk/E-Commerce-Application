@@ -4,6 +4,7 @@ using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Domain.Entities.Authentication;
+using ECommerce.Core.Domain.Enumerations;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -45,7 +46,8 @@ namespace ECommerce.Core.Application.Services.Implementations
                 username: dto.UserName,
                 email: dto.Email,
                 passwordHash: hashedPassword,
-                storeId: Guid.Empty);
+                storeId: Guid.Empty,
+                role: UserRole.Customer);
 
             await _userRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();

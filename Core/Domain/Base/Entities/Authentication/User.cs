@@ -1,5 +1,6 @@
 ﻿
 using ECommerce.Core.Domain.Common;
+using ECommerce.Core.Domain.Enumerations;
 
 namespace ECommerce.Core.Domain.Entities.Authentication
 {
@@ -15,6 +16,7 @@ namespace ECommerce.Core.Domain.Entities.Authentication
         public bool IsVerified { get; private set; }
         public bool IsActive { get; private set; }
 
+        public UserRole Role { get; private set; }
         public DateTimeOffset? LastLoginAt { get; private set; }
 
         #endregion
@@ -26,12 +28,13 @@ namespace ECommerce.Core.Domain.Entities.Authentication
         protected User() { }
 #nullable enable
 
-        private User(string username, Guid storeId, string email, string passwordHash)
+        private User(string username, Guid storeId, string email, string passwordHash, UserRole role)
         {
             UserName = username;
             StoreId = storeId;
             Email = email;
             PasswordHash = passwordHash;
+            Role = role;
             IsVerified = true;
         }
         #endregion
@@ -39,12 +42,12 @@ namespace ECommerce.Core.Domain.Entities.Authentication
 
         #region Actions and Behaviours
 
-        public static User Create(string username, Guid storeId, string email, string passwordHash)
+        public static User Create(string username, Guid storeId, string email, string passwordHash, UserRole role)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(username);
             ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
             ArgumentNullException.ThrowIfNullOrWhiteSpace(passwordHash);
-            return new User(username, storeId, email, passwordHash);
+            return new User(username, storeId, email, passwordHash, role);
         }
 
         public void VerifyUser()
