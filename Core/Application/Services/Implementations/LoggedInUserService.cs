@@ -1,6 +1,7 @@
 ﻿
 using ECommerce.Core.Application.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace ECommerce.Core.Application.Services.Implementations
 {
@@ -14,7 +15,7 @@ namespace ECommerce.Core.Application.Services.Implementations
         }
         public string GetCurrentUserIdentity()
         {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst("sub")?.Value ?? "System";
+            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
         }
 
         public string GetSignInName()

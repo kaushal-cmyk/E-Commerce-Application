@@ -11,5 +11,7 @@ namespace ECommerce.Core.Domain.ValueObjects
             By = by;
             On = on;
         }
+        public static ActionInfo Empty() => new ActionInfo(string.Empty, DateTimeOffset.MinValue);
+
     }
 }

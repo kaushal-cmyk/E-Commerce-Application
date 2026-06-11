@@ -47,6 +47,12 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Interceptors
 
             foreach (var entry in context.ChangeTracker.Entries())
             {
+                // ADD THIS - put a breakpoint here
+                var entityName = entry.Entity.GetType().Name;
+                var state = entry.State;
+                var references = entry.References.Select(r => r.Metadata.Name).ToList();
+
+
                 if (entry.State == EntityState.Added)
                 {
                     TrySetOwnedProperty(entry, "Created", actionInfo);
@@ -75,7 +81,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Interceptors
 
             owned.TargetEntry.Property("By").CurrentValue = value.By;
             owned.TargetEntry.Property("On").CurrentValue = value.On;
-            owned.TargetEntry.State = EntityState.Modified;
+            //owned.TargetEntry.State = EntityState.Modified;
         }
 
 
