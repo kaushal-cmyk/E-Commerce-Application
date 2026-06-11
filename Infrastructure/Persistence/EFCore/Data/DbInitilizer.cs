@@ -2,7 +2,6 @@
 using ECommerce.Core.Domain.Entities.Authentication;
 using ECommerce.Core.Domain.Enumerations;
 using ECommerce.Infrastructure.Persistence.EFCore.Abstractions;
-using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Data
 
         public DbInitilizer(
             EcomDBContext db,
-            Hasher hasher,
+            IHasher hasher,
             IOptions<DefaultRolesAndUserConfigurationOptions> config)
         {
             _db = db;

@@ -61,7 +61,7 @@ namespace ECommerce.Core.Application.Services.Implementations
                 throw new InvalidOperationException("Invalid credentials.");
             }
 
-            var hashedPassword = _hasher.Hash(dto.Password);
+            //var hashedPassword = _hasher.Hash(dto.Password);
             var password = _hasher.Verify(dto.Password, user.PasswordHash);
 
             if (!password)
