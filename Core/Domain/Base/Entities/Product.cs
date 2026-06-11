@@ -12,7 +12,7 @@ public class Product : FullAuditedAggregateRoot<Guid>
     public string? LongDescription { get; private set; }
     public bool IsActive { get; private set; }
     public decimal Price { get; private set; }
-    public Guid BrandId { get; private set; }
+    public Guid? BrandId { get; private set; }
 
     #endregion
 
@@ -27,7 +27,7 @@ public class Product : FullAuditedAggregateRoot<Guid>
         string? shortDescription,
         string? longDescription,
         decimal price,
-        Guid brandId)
+        Guid? brandId)
     {
         //Id = Guid.NewGuid();
         Title = title;
@@ -48,7 +48,7 @@ public class Product : FullAuditedAggregateRoot<Guid>
         string? shortDescription,
         string? longDescription,
         decimal price,
-        Guid brandId)
+        Guid? brandId)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
