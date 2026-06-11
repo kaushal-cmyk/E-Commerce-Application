@@ -2,7 +2,10 @@ using ECommerce.Core.Application.Mapping;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore;
+using ECommerce.Infrastructure.Persistence.EFCore.Abstractions;
 using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
+using ECommerce.Infrastructure.Persistence.EFCore.Data;
+using ECommerce.Infrastructure.Persistence.EFCore.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -26,6 +29,10 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHasher, Hasher>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddScoped<IDbInitilizer, DbInitilizer>();
+builder.Services.Configure<DefaultRolesAndUserConfigurationOptions>(
+    configuration.GetSection(DefaultRolesAndUserConfigurationOptions.DefaultUserAndRole));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -60,4 +67,14 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+SeedDatabase();
+
 app.Run();
+
+void SeedDatabase()
+{
+    using var scope = app.Services.CreateScope();
+    var dbInitlilizer = scope.ServiceProvider.GetRequiredService<IDbInitilizer>();
+    dbInitlilizer.Initilize();
+}
