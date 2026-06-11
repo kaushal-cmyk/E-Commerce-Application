@@ -49,22 +49,35 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Interceptors
             {
                 if (entry.State == EntityState.Added)
                 {
-                    TrySetProperty(entry, "Created", actionInfo);
+                    TrySetOwnedProperty(entry, "Created", actionInfo);
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
-                    TrySetProperty(entry, "Updated", actionInfo);
+                    TrySetOwnedProperty(entry, "Updated", actionInfo);
                 }
 
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
                     TrySetProperty(entry, "IsDeleted", true);
-                    TrySetProperty(entry, "Updated", actionInfo);
+                    TrySetOwnedProperty(entry, "Updated", actionInfo);
                 }
             }
         }
+
+        private static void TrySetOwnedProperty(EntityEntry entry, string propertyName, ActionInfo value)
+        {
+            var owned = entry.References
+    .FirstOrDefault(r => r.Metadata.Name == propertyName);
+
+            if (owned?.TargetEntry == null) return;
+
+            owned.TargetEntry.Property("By").CurrentValue = value.By;
+            owned.TargetEntry.Property("On").CurrentValue = value.On;
+            owned.TargetEntry.State = EntityState.Modified;
+        }
+
 
         private static void TrySetProperty(EntityEntry entry, string propertyName, object? value)
         {

@@ -3,7 +3,6 @@ using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore;
 using ECommerce.Infrastructure.Persistence.EFCore.Abstractions;
-using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Data;
 using ECommerce.Infrastructure.Persistence.EFCore.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,13 +21,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 //builder.Services.
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingConfig>());
-builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
+//builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IHasher, Hasher>();
-builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+//builder.Services.AddScoped<IAuthService, AuthService>();
+//builder.Services.AddScoped<IHasher, Hasher>();
+//builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddScoped<IDbInitilizer, DbInitilizer>();
 builder.Services.Configure<DefaultRolesAndUserConfigurationOptions>(

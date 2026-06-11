@@ -1,6 +1,7 @@
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
+using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Interceptors;
 using ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations;
@@ -49,6 +50,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IHasher, Hasher>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<ILoggedInUserService, LoggedInUserService>();
+        services.AddHttpContextAccessor();
         return services;
     }
 }
