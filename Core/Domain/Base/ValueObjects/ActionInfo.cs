@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Domain.ValueObjects
 {
-    public record ActionInfo
+    public sealed record ActionInfo
     {
         public string By { get; init; }
         public DateTimeOffset On { get; init; }
