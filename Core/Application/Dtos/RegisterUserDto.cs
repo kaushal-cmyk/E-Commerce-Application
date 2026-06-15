@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Application.Dtos
 {
-    public class RegisterUserDto
+    public sealed record RegisterUserDto
     {
         [Required]
         [MaxLength(256)]

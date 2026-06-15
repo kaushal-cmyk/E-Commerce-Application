@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Application.Dtos
 {
-    public class UpdateProductDto
+    public sealed record UpdateProductDto
     {
         public Guid Id { get; init; }
         public string Title { get; init; }

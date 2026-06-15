@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Application.Dtos
 {
-    public class AuthResponseDto
+    public sealed record AuthResponseDto
     {
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

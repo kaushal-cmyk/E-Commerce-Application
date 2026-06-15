@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Application.Dtos
 {
-    public class BrandDto
+    public sealed record BrandDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

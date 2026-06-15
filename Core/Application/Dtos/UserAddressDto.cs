@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Core.Application.DTOs.UserAddress;
 
-public record UserAddressDto(
+public sealed record UserAddressDto(
     Guid Id,
     string FullName,
     string PhoneNumber,
@@ -12,7 +12,7 @@ public record UserAddressDto(
     bool IsDefault
 );
 
-public record CreateUserAddressDto(
+public sealed record CreateUserAddressDto(
     string UserId,
     string FullName,
     string PhoneNumber,
@@ -23,7 +23,7 @@ public record CreateUserAddressDto(
     string PostalCode
 );
 
-public record UpdateUserAddressDto(
+public sealed record UpdateUserAddressDto(
     string FullName,
     string PhoneNumber,
     string Street,

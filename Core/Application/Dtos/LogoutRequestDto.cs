@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Application.Dtos
 {
-    public class LogoutRequestDto
+    public sealed record LogoutRequestDto
     {
         public string RefreshToken { get; set; } = string.Empty;
     }

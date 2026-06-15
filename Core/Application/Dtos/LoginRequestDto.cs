@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Application.Dtos
 {
-    public class LoginRequestDto
+    public sealed record LoginRequestDto
     {
         [Required]
         [EmailAddress]
