@@ -14,9 +14,6 @@ namespace ECommerce.Core.Application.Interface.Repositories
 
         TEntity? Find(Expression<Func<TEntity, bool>> predicate);
 
-        TEntity? GetById(object id);
-        TEntity? GetByIds(object?[]? ids);
-
         Task<bool> AnyAsync(
             Expression<Func<TEntity, bool>> predicate,
             CancellationToken cancellationToken = default(CancellationToken));

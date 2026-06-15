@@ -8,9 +8,6 @@ public interface ICommandRepository<TEntity> where TEntity : class
 
     TEntity Update(TEntity entity);
 
-    void Remove(object id);
-    void Remove(object?[]? id);
-
     void Remove(TEntity entity);
 
     Task AddRangeAsync(
