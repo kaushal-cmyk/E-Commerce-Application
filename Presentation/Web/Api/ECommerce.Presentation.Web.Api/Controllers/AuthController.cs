@@ -1,6 +1,8 @@
 ﻿using ECommerce.Core.Application.Dtos;
 using ECommerce.Core.Application.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ECommerce.Presentation.Web.Api.Controllers
 {
@@ -55,13 +57,36 @@ namespace ECommerce.Presentation.Web.Api.Controllers
             }
         }
 
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(
+    RefreshTokenRequestDto request)
+        {
+            var result = await _authService.RefreshTokenAsync(request);
+            return Ok(result);
+        }
 
-        //[HttpPost("logout")]
-        //[Authorize]
-        //public async Task<IActionResult> Logout([FromBody] LoginRequestDto dto)
-        //{
 
-        //}
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequestDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            try
+            {
+                await _authService.LogoutAsync(userId, dto.RefreshToken);
+                return Ok(new { Message = "Logged out successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
