@@ -1,5 +1,4 @@
-﻿
-using ECommerce.Core.Application.Dtos;
+﻿using ECommerce.Core.Application.Dtos;
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
@@ -31,9 +30,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             _hasher = hasher;
             _unitOfWork = unitOfWork;
         }
+
         public async Task RegisterAsync(RegisterUserDto dto)
         {
-
             var email = await _userRepository.FindAsync(e => e.Email == dto.Email);
             if (email != null)
             {
@@ -61,7 +60,6 @@ namespace ECommerce.Core.Application.Services.Implementations
                 throw new InvalidOperationException("Invalid credentials.");
             }
 
-            //var hashedPassword = _hasher.Hash(dto.Password);
             var password = _hasher.Verify(dto.Password, user.PasswordHash);
 
             if (!password)
@@ -78,7 +76,7 @@ namespace ECommerce.Core.Application.Services.Implementations
             var refreshToken = RefreshToken.Create(
                 userId: user.Id,
                 tokenHash: hashedRefreshToken,
-                expiresAt: DateTimeOffset.Now.AddDays(7));
+                expiresAt: DateTimeOffset.UtcNow.AddDays(7));
 
             await _refreshToken.AddAsync(refreshToken);
             await _unitOfWork.SaveChangesAsync();
@@ -92,45 +90,43 @@ namespace ECommerce.Core.Application.Services.Implementations
 
         public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto)
         {
-            // 1. Extract claims from expired access token
             var principal = _jwtTokenService.GetPrincipalFromExpiredToken(dto.AccessToken);
 
-            // 2. Get userId from claims
             var userIdStr = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new SecurityTokenException("Invalid token: missing user ID claim.");
 
             if (!Guid.TryParse(userIdStr, out var userId))
                 throw new SecurityTokenException("Invalid token: malformed user ID.");
 
-            // 3. Fetch the stored refresh token by userId
-            var storedToken = await _refreshToken.FindAsync(t => t.UserId == userId)
-                ?? throw new InvalidOperationException("Refresh token not found.");
+            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userId && t.IsActive);
 
-            // 4. Check active + verify hash
-            if (!storedToken.IsActive)
-                throw new InvalidOperationException("Refresh token is expired or revoked.");
+            RefreshToken? storedToken = null;
+            foreach (var token in storedTokens)
+            {
+                if (_hasher.Verify(dto.RefreshToken, token.TokenHash))
+                {
+                    storedToken = token;
+                    break;
+                }
+            }
 
-            if (!_hasher.Verify(dto.RefreshToken, storedToken.TokenHash))
-                throw new InvalidOperationException("Invalid refresh token.");
+            if (storedToken == null)
+                throw new InvalidOperationException("Invalid or expired refresh token.");
 
-            // 5. Fetch user
             var user = await _userRepository.FindAsync(u => u.Id == userId)
                 ?? throw new InvalidOperationException("User not found.");
 
-            // 6. Revoke old refresh token
             storedToken.RevokeToken();
 
-            // 7. Generate new access token
             var newAccessToken = _jwtTokenService.GenerateAccessToken(user);
 
-            // 8. Generate + hash new refresh token
             var newRawRefreshToken = Guid.NewGuid().ToString();
             var newHashedRefreshToken = _hasher.Hash(newRawRefreshToken);
 
             var newRefreshToken = RefreshToken.Create(
                 userId: user.Id,
                 tokenHash: newHashedRefreshToken,
-                expiresAt: DateTimeOffset.Now.AddDays(7));
+                expiresAt: DateTimeOffset.UtcNow.AddDays(7));
 
             await _refreshToken.AddAsync(newRefreshToken);
             await _unitOfWork.SaveChangesAsync();
@@ -147,16 +143,23 @@ namespace ECommerce.Core.Application.Services.Implementations
             if (!Guid.TryParse(userId, out var userGuid))
                 throw new ArgumentException("Invalid userId.");
 
-            var storedToken = await _refreshToken.FindAsync(t => t.UserId == userGuid && t.IsActive)
-                ?? throw new InvalidOperationException("No active refresh token found.");
+            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userGuid && t.IsActive);
 
-            if (!_hasher.Verify(rawRefreshToken, storedToken.TokenHash))
+            RefreshToken? storedToken = null;
+            foreach (var token in storedTokens)
+            {
+                if (_hasher.Verify(rawRefreshToken, token.TokenHash))
+                {
+                    storedToken = token;
+                    break;
+                }
+            }
+
+            if (storedToken == null)
                 throw new InvalidOperationException("Invalid refresh token.");
 
             storedToken.RevokeToken();
             await _unitOfWork.SaveChangesAsync();
         }
-
-
     }
 }
