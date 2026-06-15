@@ -1,4 +1,5 @@
 using ECommerce.Core.Domain.Common;
+using System.Text.RegularExpressions;
 
 namespace ECommerce.Core.Domain.Entities;
 
@@ -83,7 +84,12 @@ public class Product : FullAuditedAggregateRoot<Guid>
 
     private static string GenerateSlug(string title)
     {
-        return title.ToLower().Replace(" ", "-");
+
+        var slug = title.ToLowerInvariant();
+        slug = Regex.Replace(slug, @"[^a-z0-9\s-]", "");
+        slug = Regex.Replace(slug, @"\s+", "-");
+
+        return slug;
     }
 
     #endregion

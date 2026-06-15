@@ -1,7 +1,7 @@
 ﻿
 namespace ECommerce.Core.Domain.ValueObjects
 {
-    public class ActionInfo
+    public record ActionInfo
     {
         public string By { get; init; }
         public DateTimeOffset On { get; init; }
@@ -11,7 +11,6 @@ namespace ECommerce.Core.Domain.ValueObjects
             By = by;
             On = on;
         }
-        public static ActionInfo Empty() => new ActionInfo(string.Empty, DateTimeOffset.MinValue);
-
+        public static readonly ActionInfo Empty = new ActionInfo(string.Empty, DateTimeOffset.MinValue);
     }
 }
