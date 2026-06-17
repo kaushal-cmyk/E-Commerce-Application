@@ -39,11 +39,12 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<ProductDto>.Success(productDto);
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProducts()
+        public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts()
         {
             var products = await _productRepository.GetAllAsync();
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
+            return Result<IEnumerable<ProductDto>>.Success(productDtos);
         }
 
         public async Task<ProductDto> CreateProduct(CreateProductDto productDto)
