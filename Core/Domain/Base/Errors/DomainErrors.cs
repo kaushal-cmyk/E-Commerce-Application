@@ -50,12 +50,14 @@ namespace ECommerce.Core.Domain.Errors
         {
             public static class ErrorMessage
             {
+                public static readonly string NotFound = "Product not found";
 
             }
 
             public static class Errors
             {
-
+                public static readonly Error NotFound =
+                    new($"{nameof(Product)}.{nameof(NotFound)}", ErrorMessage.NotFound);
             }
         }
         public static class Brand

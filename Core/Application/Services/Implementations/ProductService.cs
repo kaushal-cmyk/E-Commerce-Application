@@ -5,6 +5,8 @@ using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Domain.Entities;
+using ECommerce.Core.Domain.Errors;
+using ECommerce.Core.Domain.Primitives;
 
 namespace ECommerce.Core.Application.Services.Implementations
 {
@@ -24,16 +26,17 @@ namespace ECommerce.Core.Application.Services.Implementations
             _productRepository = productRepository;
         }
 
-        public async Task<ProductDto?> GetProduct(Guid id)
+        public async Task<Result<ProductDto>> GetProduct(Guid id)
         {
             var product = await _productRepository.GetByIdAsync(id);
 
             if (product == null)
             {
-                throw new ArgumentNullException(nameof(product), "Entity not Found.");
+                return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
             }
 
-            return _mapper.Map<ProductDto>(product);
+            var productDto = _mapper.Map<ProductDto>(product);
+            return Result<ProductDto>.Success(productDto);
         }
 
         public async Task<IEnumerable<ProductDto>> GetAllProducts()
