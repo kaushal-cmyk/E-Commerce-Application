@@ -67,17 +67,12 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<ProductDto>.Success(resultDto);
         }
 
-        public async Task<ProductDto> UpdateProduct(
-            UpdateProductDto updateProductDto)
+        public async Task<Result<ProductDto>> UpdateProduct(UpdateProductDto updateProductDto)
         {
-            var product =
-                await _productRepository
-                    .GetByIdAsync(updateProductDto.Id);
+            var product = await _productRepository.GetByIdAsync(updateProductDto.Id);
 
             if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product), "Entity not Found.");
-            }
+                return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
 
             product.UpdateDetails(
                 updateProductDto.Title,
@@ -88,17 +83,24 @@ namespace ECommerce.Core.Application.Services.Implementations
             product.ChangePrice(updateProductDto.Price);
 
             _productRepository.Update(product);
-
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<ProductDto>(product);
+            var resultDto = _mapper.Map<ProductDto>(product);
+            return Result<ProductDto>.Success(resultDto);
         }
 
-
-        public async Task DeleteProduct(Guid id)
+        public async Task<Result> DeleteProduct(Guid id)
         {
+            var product = await _productRepository.GetByIdAsync(id);
+
+            if (product == null)
+                return Result.Failure(DomainErrors.Product.Errors.NotFound);
+
             await _productRepository.RemoveAsync(id);
             await _unitOfWork.SaveChangesAsync();
+
+            return Result.Success();
         }
+
     }
 }
