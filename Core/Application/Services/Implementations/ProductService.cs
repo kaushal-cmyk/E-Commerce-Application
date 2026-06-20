@@ -47,8 +47,12 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<IEnumerable<ProductDto>>.Success(productDtos);
         }
 
-        public async Task<ProductDto> CreateProduct(CreateProductDto productDto)
+        public async Task<Result<ProductDto>> CreateProduct(CreateProductDto productDto)
         {
+            var brandExists = await _brandRepository.AnyAsync(b => b.Id == productDto.BrandId);
+            if (!brandExists)
+                return Result<ProductDto>.Failure(DomainErrors.Product.Errors.BrandNotFound);
+
             var product = Product.Create(
                 title: productDto.Title,
                 shortDescription: productDto.ShortDescription,
@@ -59,7 +63,8 @@ namespace ECommerce.Core.Application.Services.Implementations
             await _productRepository.AddAsync(product);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<ProductDto>(product);
+            var resultDto = _mapper.Map<ProductDto>(product);
+            return Result<ProductDto>.Success(resultDto);
         }
 
         public async Task<ProductDto> UpdateProduct(
