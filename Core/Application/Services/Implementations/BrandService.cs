@@ -1,10 +1,11 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using ECommerce.Core.Application.Dtos;
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Domain.Entities;
+using ECommerce.Core.Domain.Errors;
+using ECommerce.Core.Domain.Primitives;
 
 namespace ECommerce.Core.Application.Services.Implementations
 {
@@ -24,19 +25,26 @@ namespace ECommerce.Core.Application.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<BrandDto?> GetBrand(Guid id)
+        public async Task<Result<BrandDto>> GetBrand(Guid id)
         {
             var brand = await _brandRepository.GetByIdAsync(id);
-            return _mapper.Map<BrandDto>(brand);
+
+            if (brand == null)
+                return Result<BrandDto>.Failure(DomainErrors.Brand.Errors.NotFound);
+
+            var brandDto = _mapper.Map<BrandDto>(brand);
+            return Result<BrandDto>.Success(brandDto);
         }
 
-        public async Task<IEnumerable<BrandDto>> GetAllBrand()
+        public async Task<Result<IEnumerable<BrandDto>>> GetAllBrand()
         {
-            var brand = await _brandRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<BrandDto>>(brand);
+            var brands = await _brandRepository.GetAllAsync();
+            var brandDtos = _mapper.Map<IEnumerable<BrandDto>>(brands);
+
+            return Result<IEnumerable<BrandDto>>.Success(brandDtos);
         }
 
-        public async Task<BrandDto> CreateBrand(CreateBrandDto brandDto)
+        public async Task<Result<BrandDto>> CreateBrand(CreateBrandDto brandDto)
         {
             var brand = Brand.Create(
                 name: brandDto.Name,
@@ -45,36 +53,35 @@ namespace ECommerce.Core.Application.Services.Implementations
             await _brandRepository.AddAsync(brand);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<BrandDto>(brand);
+            var resultDto = _mapper.Map<BrandDto>(brand);
+            return Result<BrandDto>.Success(resultDto);
         }
 
-        public async Task<BrandDto> UpdateBrand(UpdateBrandDto brandDto)
+        public async Task<Result<BrandDto>> UpdateBrand(UpdateBrandDto brandDto)
         {
             var brand = await _brandRepository.GetByIdAsync(brandDto.Id);
 
             if (brand == null)
-            {
-                throw new ArgumentNullException(nameof(brand), "Brand not found.");
-            }
+                return Result<BrandDto>.Failure(DomainErrors.Brand.Errors.NotFound);
 
             brand.UpdateDetails(brandDto.Name, brandDto.LogoUrl);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<BrandDto>(brand);
+            var resultDto = _mapper.Map<BrandDto>(brand);
+            return Result<BrandDto>.Success(resultDto);
         }
 
-        public async Task DeleteBrand(Guid id)
+        public async Task<Result> DeleteBrand(Guid id)
         {
             var brand = await _brandRepository.GetByIdAsync(id);
 
             if (brand == null)
-            {
-                throw new KeyNotFoundException($"Brand with id {id} was not found.");
-            }
+                return Result.Failure(DomainErrors.Brand.Errors.NotFound);
 
             await _brandRepository.RemoveAsync(brand);
             await _unitOfWork.SaveChangesAsync();
-        }
 
+            return Result.Success();
+        }
     }
 }
