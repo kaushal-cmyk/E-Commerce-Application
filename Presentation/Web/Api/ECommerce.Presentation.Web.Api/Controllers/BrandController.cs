@@ -1,45 +1,86 @@
 ﻿using ECommerce.Core.Application.Dtos;
 using ECommerce.Core.Application.Services.Abstractions;
+using ECommerce.Core.Domain.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Presentation.Web.Api.Controllers
+namespace ECommerce.Presentation.Web.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class BrandController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class BrandController : ControllerBase
+    private readonly IBrandService _brandService;
+
+    public BrandController(IBrandService brandService)
     {
-        private readonly IBrandService _brandService;
+        _brandService = brandService;
+    }
 
-        public BrandController(IBrandService brandService)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await _brandService.GetBrand(id);
+
+        if (result.IsFailure)
+            return NotFound(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _brandService.GetAllBrand();
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateBrandDto request)
+    {
+        var result = await _brandService.CreateBrand(request);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = result.Value.Id },
+            result.Value);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(UpdateBrandDto request)
+    {
+        var result = await _brandService.UpdateBrand(request);
+
+        if (result.IsFailure)
         {
-            _brandService = brandService;
+            return result.Error == DomainErrors.Brand.Errors.NotFound
+                ? NotFound(result.Error)
+                : BadRequest(result.Error);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _brandService.DeleteBrand(id);
+
+        if (result.IsFailure)
         {
-            var brand = await _brandService.GetBrand(id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-            return Ok(brand);
+            return result.Error == DomainErrors.Brand.Errors.NotFound
+                ? NotFound(result.Error)
+                : BadRequest(result.Error);
         }
 
-        [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody] CreateBrandDto request)
-        {
-            var brand = await _brandService.CreateBrand(request);
-            return CreatedAtAction(nameof(GetById), new { id = brand.Id }, brand);
-        }
-
-        [HttpGet("GetBrands")]
-        public async Task<IActionResult> GetAllBrand()
-        {
-            var brands = await _brandService.GetAllBrand();
-            return Ok(brands);
-        }
+        return NoContent();
     }
 }
