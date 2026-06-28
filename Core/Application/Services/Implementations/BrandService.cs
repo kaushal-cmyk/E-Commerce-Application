@@ -30,7 +30,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             var brand = await _brandRepository.GetByIdAsync(id);
 
             if (brand == null)
-                return Result<BrandDto>.Failure(DomainErrors.Brand.Errors.NotFound);
+            {
+                return Result<BrandDto>.Failure(RuntimeErrors.NullEntity);
+            }
 
             var brandDto = _mapper.Map<BrandDto>(brand);
             return Result<BrandDto>.Success(brandDto);
@@ -39,6 +41,12 @@ namespace ECommerce.Core.Application.Services.Implementations
         public async Task<Result<IEnumerable<BrandDto>>> GetAllBrand()
         {
             var brands = await _brandRepository.GetAllAsync();
+
+            if (brands == null)
+            {
+                return Result<IEnumerable<BrandDto>>.Failure(RuntimeErrors.NullEntity);
+            }
+
             var brandDtos = _mapper.Map<IEnumerable<BrandDto>>(brands);
 
             return Result<IEnumerable<BrandDto>>.Success(brandDtos);
@@ -62,7 +70,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             var brand = await _brandRepository.GetByIdAsync(brandDto.Id);
 
             if (brand == null)
-                return Result<BrandDto>.Failure(DomainErrors.Brand.Errors.NotFound);
+            {
+                return Result<BrandDto>.Failure(RuntimeErrors.NullEntity);
+            }
 
             brand.UpdateDetails(brandDto.Name, brandDto.LogoUrl);
             await _unitOfWork.SaveChangesAsync();
@@ -76,7 +86,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             var brand = await _brandRepository.GetByIdAsync(id);
 
             if (brand == null)
-                return Result.Failure(DomainErrors.Brand.Errors.NotFound);
+            {
+                return Result.Failure(RuntimeErrors.NullEntity);
+            }
 
             await _brandRepository.RemoveAsync(brand);
             await _unitOfWork.SaveChangesAsync();
