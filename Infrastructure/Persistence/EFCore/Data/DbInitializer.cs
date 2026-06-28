@@ -8,13 +8,13 @@ using Microsoft.Extensions.Options;
 
 namespace ECommerce.Infrastructure.Persistence.EFCore.Data
 {
-    public class DbInitilizer : IDbInitilizer
+    public class DbInitializer : IDbInitializer
     {
         private readonly IOptions<DefaultRolesAndUserConfigurationOptions> _config;
         private readonly EcomDBContext _db;
         private readonly IHasher _hasher;
 
-        public DbInitilizer(
+        public DbInitializer(
             EcomDBContext db,
             IHasher hasher,
             IOptions<DefaultRolesAndUserConfigurationOptions> config)

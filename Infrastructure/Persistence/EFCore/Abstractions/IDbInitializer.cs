@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Infrastructure.Persistence.EFCore.Abstractions
 {
-    public interface IDbInitilizer
+    public interface IDbInitializer
     {
         void Initilize();
     }

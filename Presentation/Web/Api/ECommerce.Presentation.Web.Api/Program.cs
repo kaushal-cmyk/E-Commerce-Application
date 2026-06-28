@@ -25,7 +25,7 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 
 
 
-builder.Services.AddScoped<IDbInitilizer, DbInitilizer>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.Configure<DefaultRolesAndUserConfigurationOptions>(
     configuration.GetSection(DefaultRolesAndUserConfigurationOptions.DefaultUserAndRole));
 
@@ -69,6 +69,6 @@ app.Run();
 void SeedDatabase()
 {
     using var scope = app.Services.CreateScope();
-    var dbInitlilizer = scope.ServiceProvider.GetRequiredService<IDbInitilizer>();
+    var dbInitlilizer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
     dbInitlilizer.Initilize();
 }
