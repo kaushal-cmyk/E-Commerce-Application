@@ -40,10 +40,10 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 
 
             var token = new JwtSecurityToken(
-                issuer: _jwtSettings.Issueer,
+                issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
                 signingCredentials: credentials
                 );
 
