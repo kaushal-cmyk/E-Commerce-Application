@@ -15,15 +15,18 @@ namespace ECommerce.Core.Application.Services.Implementations
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IRepository<Brand, Guid> _brandRepository;
 
         public ProductService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            IRepository<Product, Guid> productRepository)
+            IRepository<Product, Guid> productRepository,
+            IRepository<Brand, Guid> brandRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
+            _brandRepository = brandRepository;
         }
 
         public async Task<Result<ProductDto>> GetProduct(Guid id)
@@ -51,7 +54,9 @@ namespace ECommerce.Core.Application.Services.Implementations
         {
             var brandExists = await _brandRepository.AnyAsync(b => b.Id == productDto.BrandId);
             if (!brandExists)
-                return Result<ProductDto>.Failure(DomainErrors.Product.Errors.BrandNotFound);
+            {
+                return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
+            }
 
             var product = Product.Create(
                 title: productDto.Title,

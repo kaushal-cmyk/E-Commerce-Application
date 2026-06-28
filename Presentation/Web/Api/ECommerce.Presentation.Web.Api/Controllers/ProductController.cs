@@ -23,8 +23,10 @@ public class ProductController : ControllerBase
     {
         var result = await _productService.GetAllProducts();
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
+        {
             return BadRequest(result.Error);
+        }
 
         return Ok(result.Value);
     }
@@ -34,8 +36,10 @@ public class ProductController : ControllerBase
     {
         var result = await _productService.GetProduct(id);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
+        {
             return NotFound(result.Error);
+        }
 
         return Ok(result.Value);
     }
@@ -45,9 +49,9 @@ public class ProductController : ControllerBase
     {
         var result = await _productService.CreateProduct(request);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
-            if (result.Error == DomainErrors.Product.Errors.BrandNotFound)
+            if (result.Error == DomainErrors.Product.Errors.NotFound)
                 return NotFound(result.Error);
 
             return BadRequest(result.Error);
@@ -55,8 +59,8 @@ public class ProductController : ControllerBase
 
         return CreatedAtAction(
             nameof(GetById),
-            new { id = result.Value.Id },
-            result.Value);
+            new { id = result?.Value?.Id },
+            result?.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -66,10 +70,10 @@ public class ProductController : ControllerBase
 
         var result = await _productService.UpdateProduct(dto);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
             if (result.Error == DomainErrors.Product.Errors.NotFound ||
-                result.Error == DomainErrors.Product.Errors.BrandNotFound)
+                result.Error == DomainErrors.Brand.Errors.NotFound)
             {
                 return NotFound(result.Error);
             }
@@ -85,8 +89,10 @@ public class ProductController : ControllerBase
     {
         var result = await _productService.DeleteProduct(id);
 
-        if (result.IsFailure)
-            return NotFound(result.Error);
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Error); e
+        }
 
         return NoContent();
     }
