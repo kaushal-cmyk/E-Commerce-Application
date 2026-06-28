@@ -91,7 +91,7 @@ public class ProductController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return NotFound(result.Error); e
+            return NotFound(result.Error);
         }
 
         return NoContent();

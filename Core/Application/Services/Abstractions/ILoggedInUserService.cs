@@ -3,10 +3,10 @@ namespace ECommerce.Core.Application.Services.Abstractions
 {
     public interface ILoggedInUserService
     {
-        string GetCurrentUserIdentity();
+        string? GetCurrentUserIdentity();
 
-        string GetSignInName();
+        string? GetSignInName();
 
-        string GetPersonName();
+        string? GetPersonName();
     }
 }

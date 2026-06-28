@@ -1,11 +1,13 @@
 using ECommerce.Core.Application.Interface;
 using ECommerce.Core.Application.Interface.Repositories;
+using ECommerce.Core.Application.Options;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Interceptors;
 using ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -16,7 +18,8 @@ public static class DependencyInjection
     public static readonly Assembly EFCoreAssemblyReference = typeof(DependencyInjection).Assembly;
 
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services, string? connectionString)
+        this IServiceCollection services, string? connectionString,
+         IConfiguration configuration)
     {
         services.AddScoped<AuditInterceptor>();
         if (!string.IsNullOrWhiteSpace(connectionString))
@@ -33,7 +36,7 @@ public static class DependencyInjection
 
         // services.AddScoped<IProductRepository, ProductRepository>();
         services.AddRepositories();
-        services.AddAuthServices();
+        services.AddAuthServices(configuration);
         return services;
     }
 
@@ -46,8 +49,9 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddAuthServices(this IServiceCollection services)
+    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.AddScoped<IHasher, Hasher>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<ILoggedInUserService, LoggedInUserService>();
