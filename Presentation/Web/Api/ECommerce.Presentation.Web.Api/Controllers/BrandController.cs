@@ -23,8 +23,10 @@ public class BrandController : ControllerBase
     {
         var result = await _brandService.GetBrand(id);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
+        {
             return NotFound(result.Error);
+        }
 
         return Ok(result.Value);
     }
@@ -34,8 +36,10 @@ public class BrandController : ControllerBase
     {
         var result = await _brandService.GetAllBrand();
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
+        {
             return BadRequest(result.Error);
+        }
 
         return Ok(result.Value);
     }
@@ -45,8 +49,10 @@ public class BrandController : ControllerBase
     {
         var result = await _brandService.CreateBrand(request);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
+        {
             return BadRequest(result.Error);
+        }
 
         return CreatedAtAction(
             nameof(GetById),
@@ -59,7 +65,7 @@ public class BrandController : ControllerBase
     {
         var result = await _brandService.UpdateBrand(request);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
             return result.Error == DomainErrors.Brand.Errors.NotFound
                 ? NotFound(result.Error)
@@ -74,7 +80,7 @@ public class BrandController : ControllerBase
     {
         var result = await _brandService.DeleteBrand(id);
 
-        if (result.IsFailure)
+        if (!result.IsSuccess)
         {
             return result.Error == DomainErrors.Brand.Errors.NotFound
                 ? NotFound(result.Error)
