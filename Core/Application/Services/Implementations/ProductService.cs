@@ -98,9 +98,11 @@ namespace ECommerce.Core.Application.Services.Implementations
             var product = await _productRepository.GetByIdAsync(id, ct);
 
             if (product == null)
+            {
                 return Result.Failure(DomainErrors.Product.Errors.NotFound);
+            }
 
-            await _productRepository.RemoveAsync(id, ct);
+            await _productRepository.RemoveAsync(product, ct);
             await _unitOfWork.SaveChangesAsync(ct);
 
             return Result.Success();

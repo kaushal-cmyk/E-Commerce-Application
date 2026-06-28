@@ -13,19 +13,19 @@ namespace ECommerce.Core.Application.Services.Implementations
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public string GetCurrentUserIdentity()
+        public string? GetCurrentUserIdentity()
         {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
+            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public string GetSignInName()
+        public string? GetSignInName()
         {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst("name")?.Value ?? "System";
+            return _httpContextAccessor.HttpContext?.User?.FindFirst("name")?.Value;
         }
 
-        public string GetPersonName()
+        public string? GetPersonName()
         {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst("given_name")?.Value ?? "System";
+            return _httpContextAccessor.HttpContext?.User?.FindFirst("given_name")?.Value;
         }
     }
 }
