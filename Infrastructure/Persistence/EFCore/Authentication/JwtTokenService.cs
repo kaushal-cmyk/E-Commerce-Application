@@ -1,6 +1,7 @@
-﻿using ECommerce.Core.Application.Services.Abstractions;
+﻿using ECommerce.Core.Application.Options;
+using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Domain.Entities.Authentication;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,11 +11,11 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 {
     public class JwtTokenService : IJwtTokenService
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
 
-        public JwtTokenService(IConfiguration configuration)
+        public JwtTokenService(IOptions<JwtSettings> jwtSettings)
         {
-            _configuration = configuration;
+            _jwtSettings = jwtSettings.Value;
         }
         public string GenerateAccessToken(User user)
         {
@@ -28,7 +29,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
-                    _configuration["JwtSettings:Key"] ?? throw new InvalidOperationException("JwtSettings:Key not set")
+                    _jwtSettings.Secret ?? throw new InvalidOperationException("JwtSettings:Key not set")
                     )
                 );
 
@@ -39,8 +40,8 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
 
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"],
+                issuer: _jwtSettings.Issueer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: credentials
@@ -55,7 +56,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Authentication
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!)
+                    Encoding.UTF8.GetBytes(_jwtSettings.Secret!)
                     ),
                 ValidateIssuer = false,
                 ValidateAudience = false,
