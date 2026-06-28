@@ -25,9 +25,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<Result<BrandDto>> GetBrand(Guid id)
+        public async Task<Result<BrandDto>> GetBrand(Guid id, CancellationToken ct = default)
         {
-            var brand = await _brandRepository.GetByIdAsync(id);
+            var brand = await _brandRepository.GetByIdAsync(id, ct);
 
             if (brand == null)
             {
@@ -38,9 +38,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<BrandDto>.Success(brandDto);
         }
 
-        public async Task<Result<IEnumerable<BrandDto>>> GetAllBrand()
+        public async Task<Result<IEnumerable<BrandDto>>> GetAllBrand(CancellationToken ct = default)
         {
-            var brands = await _brandRepository.GetAllAsync();
+            var brands = await _brandRepository.GetAllAsync(ct);
 
             if (brands == null)
             {
@@ -52,22 +52,22 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<IEnumerable<BrandDto>>.Success(brandDtos);
         }
 
-        public async Task<Result<BrandDto>> CreateBrand(CreateBrandDto brandDto)
+        public async Task<Result<BrandDto>> CreateBrand(CreateBrandDto brandDto, CancellationToken ct = default)
         {
             var brand = Brand.Create(
                 name: brandDto.Name,
                 logoUrl: brandDto.LogoUrl);
 
-            await _brandRepository.AddAsync(brand);
-            await _unitOfWork.SaveChangesAsync();
+            await _brandRepository.AddAsync(brand, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
             var resultDto = _mapper.Map<BrandDto>(brand);
             return Result<BrandDto>.Success(resultDto);
         }
 
-        public async Task<Result<BrandDto>> UpdateBrand(UpdateBrandDto brandDto)
+        public async Task<Result<BrandDto>> UpdateBrand(UpdateBrandDto brandDto, CancellationToken ct = default)
         {
-            var brand = await _brandRepository.GetByIdAsync(brandDto.Id);
+            var brand = await _brandRepository.GetByIdAsync(brandDto.Id, ct);
 
             if (brand == null)
             {
@@ -75,23 +75,23 @@ namespace ECommerce.Core.Application.Services.Implementations
             }
 
             brand.UpdateDetails(brandDto.Name, brandDto.LogoUrl);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(ct);
 
             var resultDto = _mapper.Map<BrandDto>(brand);
             return Result<BrandDto>.Success(resultDto);
         }
 
-        public async Task<Result> DeleteBrand(Guid id)
+        public async Task<Result> DeleteBrand(Guid id, CancellationToken ct = default)
         {
-            var brand = await _brandRepository.GetByIdAsync(id);
+            var brand = await _brandRepository.GetByIdAsync(id, ct);
 
             if (brand == null)
             {
                 return Result.Failure(RuntimeErrors.NullEntity);
             }
 
-            await _brandRepository.RemoveAsync(brand);
-            await _unitOfWork.SaveChangesAsync();
+            await _brandRepository.RemoveAsync(brand, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
             return Result.Success();
         }

@@ -43,7 +43,7 @@ namespace ECommerce.Core.Application.Services.Implementations
 
         public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts(CancellationToken ct = default)
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _productRepository.GetAllAsync(ct);
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
             return Result<IEnumerable<ProductDto>>.Success(productDtos);
@@ -64,8 +64,8 @@ namespace ECommerce.Core.Application.Services.Implementations
                 price: productDto.Price,
                 brandId: productDto.BrandId);
 
-            await _productRepository.AddAsync(product);
-            await _unitOfWork.SaveChangesAsync();
+            await _productRepository.AddAsync(product, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
             var resultDto = _mapper.Map<ProductDto>(product);
             return Result<ProductDto>.Success(resultDto);
@@ -87,7 +87,7 @@ namespace ECommerce.Core.Application.Services.Implementations
             product.ChangePrice(updateProductDto.Price);
 
             _productRepository.Update(product);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(ct);
 
             var resultDto = _mapper.Map<ProductDto>(product);
             return Result<ProductDto>.Success(resultDto);
@@ -100,8 +100,8 @@ namespace ECommerce.Core.Application.Services.Implementations
             if (product == null)
                 return Result.Failure(DomainErrors.Product.Errors.NotFound);
 
-            await _productRepository.RemoveAsync(id);
-            await _unitOfWork.SaveChangesAsync();
+            await _productRepository.RemoveAsync(id, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
             return Result.Success();
         }
