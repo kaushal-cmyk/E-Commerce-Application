@@ -6,10 +6,10 @@ namespace ECommerce.Core.Application.Services.Abstractions
 {
     public interface IProductService
     {
-        Task<Result<ProductDto>> GetProduct(Guid id);
-        Task<Result<IEnumerable<ProductDto>>> GetAllProducts();
-        Task<Result<ProductDto>> CreateProduct(CreateProductDto request);
-        Task<Result<ProductDto>> UpdateProduct(UpdateProductDto request);
-        Task<Result> DeleteProduct(Guid id);
+        Task<Result<ProductDto>> GetProduct(Guid id, CancellationToken ct = default);
+        Task<Result<IEnumerable<ProductDto>>> GetAllProducts(CancellationToken ct = default);
+        Task<Result<ProductDto>> CreateProduct(CreateProductDto request, CancellationToken ct = default);
+        Task<Result<ProductDto>> UpdateProduct(UpdateProductDto request, CancellationToken ct = default);
+        Task<Result> DeleteProduct(Guid id, CancellationToken ct = default);
     }
 }

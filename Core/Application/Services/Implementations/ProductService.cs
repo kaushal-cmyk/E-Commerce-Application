@@ -29,20 +29,19 @@ namespace ECommerce.Core.Application.Services.Implementations
             _brandRepository = brandRepository;
         }
 
-        public async Task<Result<ProductDto>> GetProduct(Guid id)
+        public async Task<Result<ProductDto>> GetProduct(Guid id, CancellationToken ct = default)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id, ct);
 
             if (product == null)
             {
                 return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
             }
 
-            var productDto = _mapper.Map<ProductDto>(product);
-            return Result<ProductDto>.Success(productDto);
+            return Result<ProductDto>.Success(_mapper.Map<ProductDto>(product));
         }
 
-        public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts()
+        public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts(CancellationToken ct = default)
         {
             var products = await _productRepository.GetAllAsync();
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
@@ -50,9 +49,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<IEnumerable<ProductDto>>.Success(productDtos);
         }
 
-        public async Task<Result<ProductDto>> CreateProduct(CreateProductDto productDto)
+        public async Task<Result<ProductDto>> CreateProduct(CreateProductDto productDto, CancellationToken ct = default)
         {
-            var brandExists = await _brandRepository.AnyAsync(b => b.Id == productDto.BrandId);
+            var brandExists = await _brandRepository.AnyAsync(b => b.Id == productDto.BrandId, ct);
             if (!brandExists)
             {
                 return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
@@ -72,9 +71,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<ProductDto>.Success(resultDto);
         }
 
-        public async Task<Result<ProductDto>> UpdateProduct(UpdateProductDto updateProductDto)
+        public async Task<Result<ProductDto>> UpdateProduct(UpdateProductDto updateProductDto, CancellationToken ct = default)
         {
-            var product = await _productRepository.GetByIdAsync(updateProductDto.Id);
+            var product = await _productRepository.GetByIdAsync(updateProductDto.Id, ct);
 
             if (product == null)
                 return Result<ProductDto>.Failure(DomainErrors.Product.Errors.NotFound);
@@ -94,9 +93,9 @@ namespace ECommerce.Core.Application.Services.Implementations
             return Result<ProductDto>.Success(resultDto);
         }
 
-        public async Task<Result> DeleteProduct(Guid id)
+        public async Task<Result> DeleteProduct(Guid id, CancellationToken ct = default)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id, ct);
 
             if (product == null)
                 return Result.Failure(DomainErrors.Product.Errors.NotFound);
