@@ -6,18 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Presentation.Web.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 [Authorize]
-public class BrandController : ControllerBase
+public class BrandController(IBrandService _brandService) : BaseApiController
 {
-    private readonly IBrandService _brandService;
-
-    public BrandController(IBrandService brandService)
-    {
-        _brandService = brandService;
-    }
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {

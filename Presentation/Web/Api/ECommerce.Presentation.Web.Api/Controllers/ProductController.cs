@@ -6,18 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Presentation.Web.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 [Authorize]
-public class ProductController : ControllerBase
+public class ProductController(IProductService _productService) : BaseApiController
 {
-    private readonly IProductService _productService;
-
-    public ProductController(IProductService productService)
-    {
-        _productService = productService;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAllProducts()
     {

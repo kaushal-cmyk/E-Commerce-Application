@@ -19,7 +19,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementatio
             return _context.SaveChanges();
         }
 
-        public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _context.SaveChangesAsync(cancellationToken);
         }
