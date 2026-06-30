@@ -6,19 +6,9 @@ using System.Security.Claims;
 
 namespace ECommerce.Presentation.Web.Api.Controllers
 {
-
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService _authService) : BaseApiController
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
-
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
             if (!ModelState.IsValid)

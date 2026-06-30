@@ -4,6 +4,8 @@ using ECommerce.Core.Application.Interface.Repositories;
 using ECommerce.Core.Application.Services.Abstractions;
 using ECommerce.Core.Domain.Entities.Authentication;
 using ECommerce.Core.Domain.Enumerations;
+using ECommerce.Core.Domain.Errors;
+using ECommerce.Core.Domain.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -31,12 +33,12 @@ namespace ECommerce.Core.Application.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task RegisterAsync(RegisterUserDto dto)
+        public async Task<Result> RegisterAsync(RegisterUserDto dto, CancellationToken ct = default)
         {
-            var email = await _userRepository.FindAsync(e => e.Email == dto.Email);
+            var email = await _userRepository.FindAsync(e => e.Email == dto.Email, ct);
             if (email != null)
             {
-                throw new InvalidOperationException("Email already exists.");
+                return Result.Failure(DomainErrors.Authentication.Errors.EmailAlreadyExists);
             }
 
             var hashedPassword = _hasher.Hash(dto.Password);
@@ -48,23 +50,25 @@ namespace ECommerce.Core.Application.Services.Implementations
                 storeId: Guid.Empty,
                 role: UserRole.Customer);
 
-            await _userRepository.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
+            await _userRepository.AddAsync(user, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            return Result.Success();
         }
 
-        public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)
+        public async Task<Result<AuthResponseDto>> LoginAsync(LoginRequestDto dto, CancellationToken ct = default)
         {
-            var user = await _userRepository.FindAsync(e => e.Email == dto.Email);
+            var user = await _userRepository.FindAsync(e => e.Email == dto.Email, ct);
             if (user == null)
             {
-                throw new InvalidOperationException("Invalid credentials.");
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.UserNotFound);
             }
 
             var password = _hasher.Verify(dto.Password, user.PasswordHash);
 
             if (!password)
             {
-                throw new InvalidOperationException("Invalid credentials.");
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.UserNotFound);
             }
 
             user.RecordLogin();
@@ -78,14 +82,14 @@ namespace ECommerce.Core.Application.Services.Implementations
                 tokenHash: hashedRefreshToken,
                 expiresAt: DateTimeOffset.UtcNow.AddDays(7));
 
-            await _refreshToken.AddAsync(refreshToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _refreshToken.AddAsync(refreshToken, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
-            return new AuthResponseDto
+            return Result<AuthResponseDto>.Success(new AuthResponseDto
             {
                 AccessToken = accessToken,
                 RefreshToken = rawRefreshToken
-            };
+            });
         }
 
         public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto)
