@@ -6,7 +6,6 @@ using ECommerce.Core.Domain.Entities.Authentication;
 using ECommerce.Core.Domain.Enumerations;
 using ECommerce.Core.Domain.Errors;
 using ECommerce.Core.Domain.Primitives;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace ECommerce.Core.Application.Services.Implementations
@@ -61,14 +60,14 @@ namespace ECommerce.Core.Application.Services.Implementations
             var user = await _userRepository.FindAsync(e => e.Email == dto.Email, ct);
             if (user == null)
             {
-                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.UserNotFound);
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.InvalidCredentials);
             }
 
             var password = _hasher.Verify(dto.Password, user.PasswordHash);
 
             if (!password)
             {
-                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.UserNotFound);
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.InvalidCredentials);
             }
 
             user.RecordLogin();
@@ -92,17 +91,20 @@ namespace ECommerce.Core.Application.Services.Implementations
             });
         }
 
-        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto)
+        public async Task<Result<AuthResponseDto>> RefreshTokenAsync(RefreshTokenRequestDto dto, CancellationToken ct = default)
         {
             var principal = _jwtTokenService.GetPrincipalFromExpiredToken(dto.AccessToken);
 
-            var userIdStr = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new SecurityTokenException("Invalid token: missing user ID claim.");
+            var userIdStr = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdStr == null)
+            {
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.InvalidRefreshToken);
+            }
 
             if (!Guid.TryParse(userIdStr, out var userId))
-                throw new SecurityTokenException("Invalid token: malformed user ID.");
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.InvalidRefreshToken);
 
-            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userId && t.IsActive);
+            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userId && t.IsActive, ct);
 
             RefreshToken? storedToken = null;
             foreach (var token in storedTokens)
@@ -115,10 +117,15 @@ namespace ECommerce.Core.Application.Services.Implementations
             }
 
             if (storedToken == null)
-                throw new InvalidOperationException("Invalid or expired refresh token.");
+            {
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.InvalidRefreshToken);
+            }
 
-            var user = await _userRepository.FindAsync(u => u.Id == userId)
-                ?? throw new InvalidOperationException("User not found.");
+            var user = await _userRepository.GetByIdAsync(userId, ct);
+            if (user == null)
+            {
+                return Result<AuthResponseDto>.Failure(DomainErrors.Authentication.Errors.UserNotFound);
+            }
 
             storedToken.RevokeToken();
 
@@ -132,22 +139,24 @@ namespace ECommerce.Core.Application.Services.Implementations
                 tokenHash: newHashedRefreshToken,
                 expiresAt: DateTimeOffset.UtcNow.AddDays(7));
 
-            await _refreshToken.AddAsync(newRefreshToken);
-            await _unitOfWork.SaveChangesAsync();
+            await _refreshToken.AddAsync(newRefreshToken, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
-            return new AuthResponseDto
+            return Result<AuthResponseDto>.Success(new AuthResponseDto
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRawRefreshToken
-            };
+            });
         }
 
-        public async Task LogoutAsync(string userId, string rawRefreshToken)
+        public async Task<Result> LogoutAsync(string userId, string rawRefreshToken, CancellationToken ct = default)
         {
             if (!Guid.TryParse(userId, out var userGuid))
-                throw new ArgumentException("Invalid userId.");
+            {
+                return Result.Failure(DomainErrors.Authentication.Errors.UserNotFound);
+            }
 
-            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userGuid && t.IsActive);
+            var storedTokens = await _refreshToken.GetAsync(t => t.UserId == userGuid && t.IsActive, ct);
 
             RefreshToken? storedToken = null;
             foreach (var token in storedTokens)
@@ -160,10 +169,14 @@ namespace ECommerce.Core.Application.Services.Implementations
             }
 
             if (storedToken == null)
-                throw new InvalidOperationException("Invalid refresh token.");
+            {
+                return Result.Failure(DomainErrors.Authentication.Errors.InvalidRefreshToken);
+            }
 
             storedToken.RevokeToken();
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            return Result.Success();
         }
     }
 }
