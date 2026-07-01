@@ -1,3 +1,4 @@
+using ECommerce.Core.Application;
 using ECommerce.Infrastructure.Persistence.EFCore;
 using ECommerce.Infrastructure.Persistence.EFCore.Abstractions;
 using ECommerce.Infrastructure.Persistence.EFCore.Data;
@@ -19,6 +20,7 @@ builder.Services.AddAuthorization();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddPresentation();
+builder.Services.AddApplicationDependencies();
 builder.Services.AddInfrastructure(connectionString, configuration);
 
 var app = builder.Build();
