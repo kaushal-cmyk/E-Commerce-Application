@@ -1,13 +1,8 @@
-using ECommerce.Core.Application.Mapping;
-using ECommerce.Core.Application.Services.Abstractions;
-using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore;
 using ECommerce.Infrastructure.Persistence.EFCore.Abstractions;
 using ECommerce.Infrastructure.Persistence.EFCore.Data;
 using ECommerce.Infrastructure.Persistence.EFCore.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using ECommerce.Presentation.Web.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,40 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingConfig>());
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IBrandService, BrandService>();
-
-
-
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.Configure<DefaultRolesAndUserConfigurationOptions>(
     configuration.GetSection(DefaultRolesAndUserConfigurationOptions.DefaultUserAndRole));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
-            ValidateIssuer = true,
-            ValidIssuer = configuration["JwtSettings:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = configuration["JwtSettings:Audience"],
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
 builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddInfrastructure(connectionString);
+
+builder.Services.AddPresentation();
+builder.Services.AddInfrastructure(connectionString, configuration);
 
 var app = builder.Build();
 
@@ -69,6 +40,6 @@ app.Run();
 void SeedDatabase()
 {
     using var scope = app.Services.CreateScope();
-    var dbInitlilizer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-    dbInitlilizer.Initilize();
+    var dbInitlializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    dbInitlializer.Initialize();
 }

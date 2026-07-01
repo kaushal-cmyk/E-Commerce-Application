@@ -23,7 +23,7 @@ namespace ECommerce.Infrastructure.Persistence.EFCore.Data
             _hasher = hasher;
             _config = config;
         }
-        public void Initilize()
+        public void Initialize()
         {
             try
             {

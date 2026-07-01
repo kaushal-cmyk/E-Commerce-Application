@@ -6,10 +6,13 @@ using ECommerce.Core.Application.Services.Implementations;
 using ECommerce.Infrastructure.Persistence.EFCore.Authentication;
 using ECommerce.Infrastructure.Persistence.EFCore.Interceptors;
 using ECommerce.Infrastructure.Persistence.EFCore.Repositories.Implementations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using System.Text;
 
 namespace ECommerce.Infrastructure.Persistence.EFCore;
 
@@ -36,7 +39,7 @@ public static class DependencyInjection
 
         // services.AddScoped<IProductRepository, ProductRepository>();
         services.AddRepositories();
-        services.AddAuthServices(configuration);
+        services.AddAuthenticationServices(configuration);
         return services;
     }
 
@@ -49,13 +52,39 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddAuthenticationServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        services.Configure<JwtSettings>(
+            configuration.GetSection("JwtSettings"));
+
         services.AddScoped<IHasher, Hasher>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<ILoggedInUserService, LoggedInUserService>();
+
         services.AddHttpContextAccessor();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
+
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JwtSettings:Audience"],
+
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
         return services;
     }
 }
